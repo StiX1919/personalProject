@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { handleTitle, handleSub, handlePost } from '../../ducks/reducer'
+import { handleTitle, handleSub, handlePost, setPost } from '../../ducks/reducer'
 
 import Header from '../Header/Header'
 
@@ -25,7 +25,7 @@ class PostEdit extends Component {
     componentDidMount(){
         if(this.props.postID){
             axios.get(`/api/editPost/${this.props.postID}`).then(response => {
-                console.log('props in edit', this.props)
+                this.props.setPost(response.data[0].post_title, response.data[0].post_sub, response.data[0].post)
                 return this.setState({title: response.data[0].post_title, sub: response.data[0].post_sub, post: response.data[0].post})
             })
         }
@@ -87,4 +87,4 @@ class PostEdit extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { handleTitle, handleSub, handlePost })(PostEdit));
+export default withRouter(connect(mapStateToProps, { handleTitle, handleSub, handlePost, setPost })(PostEdit));

@@ -45,7 +45,7 @@ class Header extends Component {
                 {this.props.authID &&
                 <div id='loginheader'>
                     <img id='loginimg' src={this.props.profilePic} />
-                    <h3>{this.props.username}</h3>
+                    <h3>{this.props.headerUsername}</h3>
                     {this.props.dropdown === false &&
                         <img id='dropdown' src='https://d30y9cdsu7xlg0.cloudfront.net/png/196765-200.png' onClick={this.props.openMenu}/>
                     }

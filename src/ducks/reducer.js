@@ -23,6 +23,8 @@ const EDIT_POST = 'EDIT_POST'
 const OPENMENU = 'OPENMENU'
 const CLOSE_MENU = 'CLOSE_MENU'
 
+const SET_POST = 'SET_POST'
+
 
 
 //Initial State
@@ -61,6 +63,7 @@ export function userInfo(){
     return{
         type: USER_INFO,
         payload: axios.get('/api/info').then(response => {
+            console.log('info reducer', response)
             return response.data
         }).catch(console.log)
     }
@@ -170,6 +173,12 @@ export function closeMenu(){
         payload: false
     }
 }
+export function setPost(title, sub, details){
+    return {
+        type: SET_POST,
+        payload: {title, sub, details}
+    }
+}
 
 
 
@@ -196,6 +205,7 @@ export default function reducer(state=initialState, action) {
             return Object.assign({}, state, {
                 isLoading: false,
                 username: action.payload.username,
+                headerUsername: action.payload.username,
                 runner: action.payload.runner,
                 city: action.payload.city,
                 state: action.payload.state,
@@ -249,6 +259,11 @@ export default function reducer(state=initialState, action) {
         case CLOSE_MENU: {
             return Object.assign({}, state, {dropdown: action.payload})
         }
+
+        case SET_POST: {
+            return Object.assign({}, state, {postTitle: action.payload.title, subTitle: action.payload.sub, post: action.payload.details})
+        }
+    
         default:
             return state
     }

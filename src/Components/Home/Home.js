@@ -28,6 +28,7 @@ class Home extends Component {
     componentDidMount(){
         this.props.userInfo()
         axios.get('/api/posts').then(response => {
+            console.log('response', response)
             this.setState({posts: response.data}) 
         })
         axios.get('/api/openJobs').then(response => {
@@ -120,6 +121,7 @@ class Home extends Component {
                     </div>
 
                     </div>
+                    
                 </div>
                 }
 
@@ -171,6 +173,7 @@ class Home extends Component {
                     </div>
                 </div>
                 }
+                {console.log('state', this.state, 'props', this.props)}
             </div>
         )
     }

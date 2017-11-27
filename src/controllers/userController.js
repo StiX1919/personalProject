@@ -11,10 +11,9 @@ module.exports = {
     getInfo: (req,res,next) => {
         const dbInstance = req.app.get('db')
         const { authid } = req.user
-        console.log('req.user',req.user)
 
         dbInstance.getUserInfo([authid])
-        .then(response => {console.log(response[0]); return res.status(200).json(response[0])})
+        .then(response => { return res.status(200).json(response[0])})
         .catch(console.log)
     },
     openJobs: (req,res,next)=> {
@@ -47,6 +46,7 @@ module.exports = {
     getPosts: (req,res,next) => {
         const dbInstance = req.app.get('db')
         const { id } = req.user
+        console.log('posts user', req.user)
 
         dbInstance.getAllPosts([id])
         .then(response => { return res.status(200).json(response)})
