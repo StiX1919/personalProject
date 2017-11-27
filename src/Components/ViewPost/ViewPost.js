@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { handleTitle, handleSub, handlePost } from '../../ducks/reducer'
+import { handleTitle, handleSub, handlePost, closeMenu } from '../../ducks/reducer'
 
 import Header from '../Header/Header'
 import './ViewPost.css'
@@ -25,7 +25,7 @@ class ViewPost extends Component {
     componentWillMount(){
         if(this.props.postID){
             axios.get(`/api/editPost/${this.props.postID}`).then(response => {
-                return this.setState({title: response.data[0].post_title, sub: response.data[0].post_sub, post: response.data[0].post, userID: response.data[0].userid})
+                return this.setState({title: response.data[0].post_title, sub: response.data[0].post_sub, post: response.data[0].post, userID: response.data[0].userid, runnerID: response.data[0].runnerid})
             })
             axios.get(`/api/poster/${this.props.postUser}`).then(response => {
                 console.log('state', this.state)
@@ -46,9 +46,9 @@ class ViewPost extends Component {
             <Header page='View Post'/>
             {this.props.dropdown === true &&
                 <div id='dropdownMenu'>
-                    <Link to='/Home'><button>Home</button></Link>
-                    <Link to='/editProfile'><button>Profile</button></Link>
-                    <Link to='/createReq'><button>Create New Request</button></Link>
+                    <Link to='/Home'><button onClick={this.props.closeMenu}>Home</button></Link>
+                    <Link to='/editProfile'><button onClick={this.props.closeMenu}>Profile</button></Link>
+                    <Link to='/createReq'><button onClick={this.props.closeMenu}>Create New Request</button></Link>
                     <button id='logout' onClick={this.handleLogout}>Logout</button>
                 </div>
             }
@@ -67,6 +67,12 @@ class ViewPost extends Component {
                             <h1>{this.state.title}</h1>
                             <h2>{this.state.sub}</h2>
                             <Link to='/Home'><button>Home</button></Link>
+                            {this.state.userID && this.state.runnerID &&
+                                <button>Complete Job</button>
+                            }
+                            {this.state.userID === this.props.userID && this.state.runnerID &&
+                                <button>Remove runner</button>
+                            }
                         </div>
                     </div>
                     <div className='description'>
@@ -81,4 +87,4 @@ class ViewPost extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { handleTitle, handleSub, handlePost })(ViewPost));
+export default withRouter(connect(mapStateToProps, { handleTitle, handleSub, handlePost, closeMenu })(ViewPost));

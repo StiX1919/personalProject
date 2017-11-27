@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { userInfo, handleTitle, handleSub, handlePost } from '../../ducks/reducer'
+import { userInfo, handleTitle, handleSub, handlePost, closeMenu } from '../../ducks/reducer'
 
 import Header from '../Header/Header'
 
@@ -13,7 +13,7 @@ class BuildRequest extends Component {
     constructor(props){
         super(props)
         
-
+        this.handleLogout = this.handleLogout.bind(this)
         this.postJob = this.postJob.bind(this)
     }
     
@@ -27,10 +27,22 @@ class BuildRequest extends Component {
        
    }
 
+   handleLogout(){
+    window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000'
+    axios.get('/logout')
+    }
+
     render(){
         return (
             <div>
             <Header page='New Job Request'/>
+            {this.props.dropdown === true &&
+                <div id='dropdownMenu'>
+                    <Link to='/Home'><button onClick={this.props.closeMenu}>Home</button></Link>
+                    <Link to='/editProfile'><button onClick={this.props.closeMenu}>Profile</button></Link>
+                    <button id='logout' onClick={this.handleLogout}>Logout</button>
+                </div>
+            }
             <div className='body'>
                 <div className='input-box'>
                     <div className='input-header'>
@@ -60,4 +72,4 @@ class BuildRequest extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { userInfo, handleTitle, handleSub, handlePost })(BuildRequest));
+export default withRouter(connect(mapStateToProps, { userInfo, handleTitle, handleSub, handlePost, closeMenu })(BuildRequest));

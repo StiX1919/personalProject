@@ -70,6 +70,7 @@ class PostCards extends Component {
                 {this.props.runnerid &&
                     <div id='acceptedCard'>
                         <div id='postInfo'>
+                            <h2>Job Accepted</h2>
                             <div id='title'>
                                 <h3>Title:</h3>
                                 <h5>{this.props.title}</h5>
@@ -126,7 +127,7 @@ class PostCards extends Component {
             {this.props.acceptedRow &&
             <div id='cardBody'>
             {this.state.hidden === false &&
-                <div id='card'>
+                <div id='acceptedCard'>
             
                 <div id='postInfo'>
                     <div id='sub'>
