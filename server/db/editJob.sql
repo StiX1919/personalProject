@@ -1,0 +1,1 @@
+UPDATE posts SET post_title = $1, post_sub = $2, post = $3 WHERE id = $4;

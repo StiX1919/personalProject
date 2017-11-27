@@ -1,0 +1,49 @@
+#mainHeader {
+    height: 80px;
+    width: 100vw;
+    background: green;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.5), 0 6px 6px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+#headerContainer {
+    height: 100%;
+    width: 98%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.pageTitle {
+    margin-right: 10%
+}
+
+#logo {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 200px
+}
+
+.logoImg {
+    height: 78px;
+    width: 78px;
+}
+
+#loginheader {
+    display: flex;
+    top: 0
+}
+
+#loginimg {
+    height: 60px;
+    width: 60px;
+}
+
+#dropdown {
+    height: 50px;
+    width: 50px
+}
+

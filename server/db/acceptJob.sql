@@ -1,0 +1,1 @@
+UPDATE posts SET runnerid = $1 WHERE id = $2

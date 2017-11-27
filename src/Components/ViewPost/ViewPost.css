@@ -1,0 +1,32 @@
+.jobinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/seamless_paper_texture.png')
+    
+}
+
+.description {
+    display: flex;
+    justify-content: center;
+    width: 80%
+}
+
+#profInfo {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    justify-content: center;
+    align-items: center
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 40%;
+    height: 90%;
+}

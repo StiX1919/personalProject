@@ -1,0 +1,1 @@
+select * from posts where runnerid is null and userid != $1

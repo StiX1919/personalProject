@@ -1,0 +1,99 @@
+#body {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%
+}
+
+.profile {
+    height: 200px;
+    width: 350px;
+    border: solid black 2px;
+    padding: 5px;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/seamless_paper_texture.png')
+}
+
+#reqButton {
+    height: 30px;
+    width: 50%
+}
+
+.requests-outer {
+    width: 70%;
+    height: 80vh;
+    border: solid black 2px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/seamless_paper_texture.png')
+}
+.requests-inner {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 95%;
+    height: 80%;
+    border: solid black 2px;
+    padding: 5px
+}
+
+#createReq {
+    width: 50%;
+    height: 50px;
+    margin: 10px;
+}
+
+
+/* runner css */
+
+.requests-outer-runner {
+    width: 30%;
+    height: 80vh;
+    border: solid black 2px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/seamless_paper_texture.png')
+}
+
+.requests-inner-runner {
+    display: flex;
+    align-items: center;
+    overflow: scroll;
+    flex-direction: column;
+    width: 95%;
+    height: 80%;
+    border: solid black 2px;
+    padding: 5px;
+}
+
+
+h1 {
+    margin: 5px 0
+}
+h2 {
+    margin: 5px 0
+}
+h3 {
+    margin: 5px 0
+}
+h4 {
+    margin: 5px 0
+}
+h5 {
+    margin: 5px 0
+}
+
+#dropdownMenu {
+    width: 200px;
+    height: 400px;
+    background: rgb(10, 168, 10);
+    z-index: 100;
+    top: 80px;
+    right: 0px;
+    position: fixed
+}

@@ -1,0 +1,65 @@
+.body {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.input-box {
+    width: 60%;
+    height: 80vh;
+    border: solid black 2px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/seamless_paper_texture.png')
+}
+
+.input-header {
+    display: flex;
+    justify-content: center space-around;
+    width: 70%;
+    height: 180px;
+    margin: 20px;
+
+}
+
+.profile {
+    display: flex;
+    height: 150px;
+    width: 300px;
+    border: solid black 2px;
+    padding: 5px;
+}
+
+.header {
+    height: 200px;
+    width: 100%
+}
+
+.field-box {
+    width: 95%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px
+}
+
+.input-field {
+    width: 100%;
+    max-width: 100%;
+    height: 90%;
+    max-height: 90%;
+    border: solid black 2px;
+    padding: 5px;
+}
+
+textarea {
+    resize: none
+}
+input {
+    width: 50%;
+}
