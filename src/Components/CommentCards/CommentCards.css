@@ -1,0 +1,15 @@
+#commentCard {
+    border: solid black 2px;
+    display: flex;
+    height: 125px;
+    width: 80%;
+    align-items: center
+}
+#commentuser {
+    margin: 0 30px
+}
+
+.commentPic {
+    height: 90px;
+    width: 90px;
+}

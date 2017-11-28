@@ -26,6 +26,7 @@ class BuildProfile extends Component {
 
     componentDidMount(){
         this.props.userInfo()
+        this.props.closeMenu()
     }
 
 

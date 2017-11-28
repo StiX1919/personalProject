@@ -36,10 +36,27 @@ module.exports = {
     newJob: (req, res, next) => {
         const dbInstance = req.app.get('db');
         const { postTitle, subTitle, post, userID, username } = req.body;
-        console.log('req body', req.body)
         
         dbInstance.createPost([postTitle, subTitle, post, userID, username])
         .then( () => {console.log('REQ BODY', req.body); return res.status(200).json()})
+        .catch(console.log)
+    },
+    //comment Posting
+    newComment: (req, res, next) => {
+        const dbInstance = req.app.get('db');
+        const { comment, userID } = req.body;
+        const { ID } = req.params
+        
+        dbInstance.createComment([comment, userID, ID])
+        .then( () => {console.log('REQ BODY', req.body); return res.status(200).json()})
+        .catch(console.log)
+    },
+    getComments: (req,res,next)=> {
+        const dbInstance = req.app.get('db')
+        const { ID } = req.params
+
+        dbInstance.getComments([ID])
+        .then(response => { return res.status(200).json(response) })
         .catch(console.log)
     },
     //getting all posts for homepage
@@ -65,7 +82,6 @@ module.exports = {
     posterInfo: (req,res,next) => {
         const dbInstance = req.app.get('db')
         const { ID } = req.params
-        console.log('HELLO')
         
         dbInstance.getPoster([ID])
         .then(response => { return res.status(200).json(response) })

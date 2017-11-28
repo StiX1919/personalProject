@@ -87,8 +87,11 @@ class Home extends Component {
                                 {this.state.posts.length > 0 &&
                                     this.state.posts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id}/>)
                                 }
-                                {this.state.posts.length < 6 &&
+                                {this.state.posts.length < 6 && this.props.username &&
                                     <Link to='/createReq'><button id='createReq' onClick={this.props.closeMenu}>Create New Request</button></Link>
+                                }
+                                {!this.props.username &&
+                                    <Link to='/editProfile'><button id='createReq' onClick={this.props.closeMenu}>Finish Your Profile</button></Link>
                                 }
                             </div>
                         </div>
@@ -114,9 +117,12 @@ class Home extends Component {
                             {this.state.posts.length > 0 &&
                                 this.state.posts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
                             }
-                            {this.state.posts.length < 6 &&
+                            {this.state.posts.length < 6 && this.props.username &&
                                 <Link id='cardBody' to='/createReq'><button id='createReq' onClick={this.props.closeMenu}>Create New Request</button></Link>
                             }
+                            {!this.props.username &&
+                                    <Link to='/editProfile'><button id='createReq' onClick={this.props.closeMenu}>Finish Your Profile</button></Link>
+                                }
                         </div>
                     </div>
 
@@ -155,8 +161,11 @@ class Home extends Component {
                                 {this.state.posts.length > 0 &&
                                     this.state.posts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
                                 }
-                                {this.state.posts.length < 4 &&
+                                {this.state.posts.length < 4 && this.props.username &&
                                     <Link id='cardBody' to='/createReq'><button id='createReq' onClick={this.props.closeMenu}>Create New Request</button></Link>
+                                }
+                                {!this.props.username &&
+                                    <Link to='/editProfile'><button id='createReq' onClick={this.props.closeMenu}>Finish Your Profile</button></Link>
                                 }
                             </div>
                         </div>

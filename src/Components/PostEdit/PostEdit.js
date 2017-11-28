@@ -71,11 +71,11 @@ class PostEdit extends Component {
                             <h3>Subtitle</h3>
                             <input type='text' onChange={this.props.handleSub} placeholder={this.state.sub}/>
                             <h3></h3>
-                            <Link to='/home'><button onClick={this.editJob}>Edit Job</button></Link>
+                            <Link to='/Home'><button onClick={this.editJob}>Edit Job</button></Link>
+                            <Link to='/Home'><button onClick={this.props.closeMenu}>Home</button></Link>
                         </div>
                     </div>
                     <div className='field-box'>
-                        {console.log("PROPS", this.props)}
                         <textarea onChange={this.props.handlePost} className='input-field' rows="10" cols="190" placeholder={this.state.post}></textarea>
                     </div>
                 </div>

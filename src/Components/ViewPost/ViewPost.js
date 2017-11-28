@@ -3,8 +3,9 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { handleTitle, handleSub, handlePost, closeMenu } from '../../ducks/reducer'
+import { handleTitle, handleSub, handlePost, closeMenu, handleComment } from '../../ducks/reducer'
 
+import CommentCards from '../CommentCards/CommentCards'
 import Header from '../Header/Header'
 import './ViewPost.css'
 
@@ -16,20 +17,25 @@ class ViewPost extends Component {
         this.state = {
             title: '',
             sub: '',
-            post: ''
+            post: '',
+            comments: {}
         }
-        this.handleLogout= this.handleLogout.bind(this)
-        
+        this.handleLogout = this.handleLogout.bind(this)
+        this.postComment = this.postComment.bind(this)
     }
     
     componentWillMount(){
         if(this.props.postID){
             axios.get(`/api/editPost/${this.props.postID}`).then(response => {
-                return this.setState({title: response.data[0].post_title, sub: response.data[0].post_sub, post: response.data[0].post, userID: response.data[0].userid, runnerID: response.data[0].runnerid})
+                return this.setState({title: response.data[0].post_title, sub: response.data[0].post_sub, post: response.data[0].post, userID: response.data[0].userid, runnerID: response.data[0].runnerid, PID: response.data[0].id})
             })
             axios.get(`/api/poster/${this.props.postUser}`).then(response => {
                 console.log('state', this.state)
                 return this.setState({username: response.data[0].username, city: response.data[0].city, profilePic: response.data[0].profilepic})
+            })
+            axios.get(`/api/getComments/${this.props.postID}`).then(response => {
+                console.log('comments', response)
+                return this.setState({comments: response.data})
             })
             
         }
@@ -38,6 +44,12 @@ class ViewPost extends Component {
     handleLogout(){
         window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000'
         axios.get('/logout')
+    }
+
+    postComment(){
+        axios.post(`/api/addComment/${this.state.PID}`, this.props).then(res=> {
+           return res.data})
+       
     }
 
     render(){
@@ -67,8 +79,11 @@ class ViewPost extends Component {
                             <h1>{this.state.title}</h1>
                             <h2>{this.state.sub}</h2>
                             <Link to='/Home'><button>Home</button></Link>
-                            {this.state.userID && this.state.runnerID &&
-                                <button>Complete Job</button>
+                            {this.state.userID === this.props.userID && 
+                                <button>Runner Completed Job</button>
+                            }
+                            {this.state.runnerID === this.props.userID &&
+                                <button>Job has been Completed</button>
                             }
                             {this.state.userID === this.props.userID && this.state.runnerID &&
                                 <button>Remove runner</button>
@@ -76,10 +91,28 @@ class ViewPost extends Component {
                         </div>
                     </div>
                     <div className='description'>
-                        <h4 className='input-field'>{this.state.post}</h4>
+                        <h3 className='input-field'>{this.state.post}</h3>
+                    </div>
+                    <div className='commentInput'>
+                        <h4>Leave a comment</h4>
+                        <textarea onChange={this.props.handleComment} className='comment-field' rows="10" cols="170" placeholder='Thoughts?'></textarea>
+                        {console.log('view props', this.props, 'view state', this.state)}
+                        {this.props.comment.length < 1 &&
+                            <button>Post Comment</button>
+                        }
+                        {this.props.comment.length > 0 &&
+                        <button onClick={this.postComment}>Post Comment</button>
+                        }
+
+                        <h5>Comments</h5>
+                        {this.state.comments.length > 0 &&
+                            this.state.comments.map( comment => <CommentCards username={comment.username} commentpic={comment.profilepic} usercomment={comment.comment} runner={comment.runner}/>)
+                        }
                     </div>
                 </div>
+                
             </div>
+            
             </div>
         )
     }
@@ -87,4 +120,4 @@ class ViewPost extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { handleTitle, handleSub, handlePost, closeMenu })(ViewPost));
+export default withRouter(connect(mapStateToProps, { handleTitle, handleSub, handlePost, closeMenu, handleComment })(ViewPost));

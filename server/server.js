@@ -8,7 +8,7 @@ const Auth0Strategy = require("passport-auth0");
 
 const { connectionString } = require('../config').massive;
 const { domain, clientID, clientSecret } = require('../config').auth0
-const { create, getInfo, newJob, getPosts, editPost, deletePost, editJob, openJobs, acceptJob, acceptedJobs, posterInfo } = require('../src/controllers/userController')
+const { create, getInfo, newJob, getPosts, editPost, deletePost, editJob, openJobs, acceptJob, acceptedJobs, posterInfo, newComment, getComments } = require('../src/controllers/userController')
 
 const logout = require('express-passport-logout')
 
@@ -108,6 +108,8 @@ app.get('/api/openJobs', openJobs)
 app.get('/api/acceptedJobs', acceptedJobs)
 app.post('/api/editJob/:ID', editJob)
 
+app.post('/api/addComment/:ID', newComment)
+app.get('/api/getComments/:ID', getComments)
 
 app.get('/api/editPost/:ID', editPost)
 app.get('/api/poster/:ID', posterInfo)

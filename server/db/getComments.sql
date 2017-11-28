@@ -1,0 +1,1 @@
+SELECT * FROM users u, comments c WHERE u.id = c.userid and postid = $1;

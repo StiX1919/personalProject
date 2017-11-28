@@ -17,7 +17,6 @@
 }
 
 .pageTitle {
-    margin-right: 10%
 }
 
 #logo {
@@ -34,7 +33,8 @@
 
 #loginheader {
     display: flex;
-    top: 0
+    top: 0;
+    align-items: center;
 }
 
 #loginimg {
@@ -43,7 +43,10 @@
 }
 
 #dropdown {
-    height: 50px;
-    width: 50px
+    height: 30px;
+    width: 30px;
+    margin-left: 20px;
+    border: solid rgb(68, 68, 68) 1px;
+    border-radius: 10px
 }
 

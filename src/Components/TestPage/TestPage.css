@@ -1,0 +1,96 @@
+#wholePage {
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    background-image: url('https://websitica.com/wp-content/uploads/2016/05/Gray-plain-website-background.jpg')
+}
+
+#headerwrap {
+    border-right: solid rgba(255, 255, 255, 0.753);
+    height: 90%;
+    width: 330px;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.logoCircle {
+    height: 190px;
+    width: 190px;
+    border-radius: 120px;
+    background: rgba(255, 255, 255, 0.753);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: slidein 1s; 
+    position: fixed;
+    left: 70px;
+    top: 50px
+}
+@keyframes slidein{
+    from {
+        transform: translateX(-500px) rotate(-360deg);
+      }
+    
+      to {
+        transform: translateX(0px) rotate(0deg);
+      }
+}
+#logo {
+    height: 180px;
+    width: 180px;
+}
+.mainTitle {
+    height: 100px;
+    position: fixed;
+    left: 79px;
+    top: 240px;
+    font-size: 40px;
+    color: rgba(255, 255, 255, 0.753);
+    animation: drop 2s;
+}
+@keyframes drop{
+    from {
+        transform: translateY(-120px); 
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    75% {
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+#links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    list-style: none;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.753);
+    font-size: 20px;
+    justify-content: space-around;
+    width: 100%
+    
+}
+
+.headerLink {
+    width: 100%;
+    text-align: center
+}
+.headerLink:hover {
+    animation: linkhover 1s
+}
+@keyframes linkhover {
+    to {
+        background-color: green
+    }
+}

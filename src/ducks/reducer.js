@@ -16,6 +16,8 @@ const CHANGE_TITLE = 'CHANGE_TITLE'
 const CHANGE_SUB = 'CHANGE_SUB'
 const CHANGE_POST = 'CHANGE_POST'
 
+const CHANGE_COMMENT = 'CHANGE_COMMENT'
+
 const POST_ID = 'POST_ID'
 const POST_USER = 'POST_USER'
 const EDIT_POST = 'EDIT_POST'
@@ -42,7 +44,8 @@ const initialState = {
         subTitle: '',
         post: '',
         postID: null,
-        dropdown: false
+        dropdown: false,
+        comment: ''
     
 }
 
@@ -140,6 +143,13 @@ export function handleSub(e){
 export function handlePost(e){
     return {
         type: CHANGE_POST,
+        payload: e.target.value
+    }
+}
+
+export function handleComment(e){
+    return {
+        type: CHANGE_COMMENT,
         payload: e.target.value
     }
 }
@@ -244,6 +254,9 @@ export default function reducer(state=initialState, action) {
         }
         case CHANGE_POST: {
             return Object.assign({}, state, {post: action.payload})
+        }
+        case CHANGE_COMMENT: {
+            return Object.assign({}, state, {comment: action.payload})
         }
 
         case POST_ID: {

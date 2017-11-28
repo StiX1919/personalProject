@@ -8,6 +8,7 @@ import Home from '../Home/Home'
 import BuildRequest from '../BuildRequest/BuildRequest'
 import PostEdit from '../PostEdit/PostEdit'
 import ViewPost from '../ViewPost/ViewPost'
+import TestPage from '../TestPage/TestPage'
 
 import { userInfo } from '../../ducks/reducer'
 
@@ -35,6 +36,7 @@ componentDidMount(){
               <Route path='/createReq' component={BuildRequest}/>
               <Route path='/postEdit' component={PostEdit}/>
               <Route path='/viewPost' component={ViewPost}/>
+              <Route path='/testPage' component={TestPage}/>
             </Switch>
       </div>
     );
