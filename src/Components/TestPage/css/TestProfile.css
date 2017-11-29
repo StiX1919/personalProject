@@ -1,0 +1,66 @@
+#profileLink {
+    height: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-left: 3%
+}
+
+#testProfile {
+    height: 80%;
+    width: 50%;
+    border: solid black 2px;
+    box-shadow: 5px 5px 10px black;
+    background:  rgba(255, 255, 255, .2)
+}
+
+#profanduser {
+    height: 320;
+    display: flex;
+    align-items: center
+}
+
+#profilePicBox{
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+#testProfilePic {
+    width: 250px;
+    height: 250px;
+    margin: 40px
+}
+
+.profuser {
+    font-size: 60px;
+    color: rgba(255, 255, 255, 0.753)
+}
+
+#otherdata {
+    margin: 10px 40px;
+    height: 35%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center space-between
+}
+#otherdataedit {
+    margin: 40px;
+    height: 35%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center space-between
+}
+
+.testProfilebuttons {
+    margin: 20px;
+    width: 40%;
+    display: flex;
+    justify-content: space-around
+
+}

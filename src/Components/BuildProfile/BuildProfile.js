@@ -71,7 +71,7 @@ class BuildProfile extends Component {
 
                 {this.props.authID && this.state.edit === false &&
                 <div>
-                    <img src={this.props.profilePic}/>
+                    <img id=''src={this.props.profilePic}/>
                     <h5>Profile Picture</h5>
                     <div>UserName: {this.props.username}</div>
                     <div>Age: {this.props.age}</div> 

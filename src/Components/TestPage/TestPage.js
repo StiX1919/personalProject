@@ -4,13 +4,15 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { userInfo, closeMenu } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner } from '../../ducks/reducer'
 
 import PostCards from '../PostCards/PostCards'
 import Header from '../Header/Header'
 
 
-import './TestPage.css'
+import './css/TestHome.css'
+import './css/TestProfile.css'
+import './css/TestUserReqs.css'
 
 class TestPage extends Component {
     constructor(props){
@@ -19,6 +21,7 @@ class TestPage extends Component {
             posts: {},
             openJobs: {},
             acceptedJobs: {},
+            edit: false,
             links: {
                 home: true,
                 profile: false,
@@ -27,11 +30,22 @@ class TestPage extends Component {
                 userJobs: false
             }
         }
+
         this.goHome = this.goHome.bind(this)
         this.goProfile = this.goProfile.bind(this)
         this.goReqs = this.goReqs.bind(this)
         this.goOpen = this.goOpen.bind(this)
         this.goRun = this.goRun.bind(this)
+
+        // profile edit functions
+        this.handleEdit = this.handleEdit.bind(this)
+        this.handleCancle = this.handleCancle.bind(this)
+        this.postUser = this.postUser.bind(this)
+        this.handleLogout = this.handleLogout.bind(this)
+
+
+        this.runnerRow = this.runnerRow.bind(this)
+        this.acceptedRow = this.acceptedRow.bind(this)
     }
 
     componentDidMount(){
@@ -56,6 +70,9 @@ class TestPage extends Component {
         window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000'
         axios.get('/logout')
     }
+
+
+    // page routing
     goHome(){
         this.setState({links:{home: true, profile: false, userReqs: false, openJobs: false, userJobs: false}})
     }
@@ -72,7 +89,29 @@ class TestPage extends Component {
         this.setState({links:{home: false, profile: false, userReqs: false, openJobs: false, userJobs: true}})
     }
     
+
+    // profile edit functions
+    handleEdit(){
+        this.setState({edit: true})
+    }
+    handleCancle(){
+        this.setState({edit: false})
+        this.props.userInfo()
+    }
+    postUser(){
+        axios.post('/api/addUser', this.props).then(res=> {
+           this.setState({edit: false})
+           return res.data})
+       
+   }
     
+
+   runnerRow() {
+
+   }
+   acceptedRow(){
+
+   }
 
 
     render(){
@@ -128,10 +167,151 @@ class TestPage extends Component {
                 }
 
                 {/* home view for logged in users */}
+
                 {this.props.authID && this.state.links.home === true &&
                     <h1>Thanks for logging in {this.props.username}</h1>
                 }
-                {console.log(this.state)}
+
+                {/* Profile view */}
+
+                {this.props.authID && this.state.links.profile === true &&
+                    <div id='profileLink'>
+                        {!this.props.username &&
+                            <h1>Let's finish your profile!</h1>
+                        }
+
+                        {this.props.authID && this.state.edit === false &&
+                            <div id='testProfile'>
+                                <div id='profanduser'>
+                                    <div id='profilePicBox'>
+                                        <img id='testProfilePic' src={this.props.profilePic}/>
+                                        <h4>Profile Picture</h4>
+                                    </div>
+                                    <div className='username'>
+                                        {this.props.runner === 1 &&
+                                            <h1>Runner:</h1>
+                                        }
+                                        {this.props.runner === 0 &&
+                                            <h1>Poster:</h1>
+                                        }
+                                        {this.props.runner === null &&
+                                            <h1>Poster:</h1>
+                                        }
+                                        <h1 className='profuser'>{this.props.username}</h1>
+                                    </div>
+                                </div>
+                                <div id='otherdata'>
+                                    <h2>Age: {this.props.age}</h2> 
+                                    <h2>City: {this.props.city}</h2>
+                                    <h2>State: {this.props.state}</h2>
+                                    {this.props.runner ===1 && 
+                                        <h3>You are Currently a Runner</h3>
+                                    }
+                                    <div>
+                                        <button onClick={this.handleEdit}>Edit</button>
+                                    </div>
+                                </div>
+                            </div> 
+                        }   
+
+                        {this.props.authID && this.state.edit === true &&
+                            <div id='testProfile'>
+
+                                <img id='testProfilePic' src={this.props.profilePic}/>
+                                
+                                <div id='otherdataedit'>
+                                    <h2>Profile Picture</h2>
+                                    <input type='text' placeholder={this.props.profilePic} onChange={this.props.handlePic}/>
+                                    <h2>Username</h2>
+                                    <input type='text' placeholder={this.props.username} onChange={this.props.handleUserName}/>
+                                    <h2>Age</h2>
+                                    <input type='text' placeholder={this.props.age} maxLength='3' onChange={this.props.handleAge}/>
+                                    <h2>City</h2>
+                                    <input type='text' placeholder={this.props.city} onChange={this.props.handleCity}/>
+                                    <h2>State</h2>
+                                    <input type='text' placeholder={this.props.state} maxLength='2' onChange={this.props.handleState}/>
+                                    {this.props.runner === 1 && 
+                                        <h1>You're a runner!</h1>
+                                    }
+                                    {!this.props.runner &&
+                                        <div>
+                                            <h4>Do you want to be a runner?</h4>
+                                            <button onClick={this.props.isRunner}>Click Here</button>
+                                        </div>
+                                    }
+                                    {this.props.runner === 1 &&
+                                        <div>
+                                            <h4>Done running?</h4>
+                                            <button onClick={this.props.notRunner}>Click Here</button>
+                                        </div>
+                                    }
+
+                                    <div className='testProfilebuttons'>
+                                        <button onClick={this.postUser}>Save</button>
+                                        <button onClick={this.handleCancle}>Cancle</button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                {/* user requests view */}
+
+                {this.props.authID && this.state.links.userReqs === true &&
+                    <div id='profileLink'>
+                        <div className='testreqsouter'>
+                            <h1>Your Open Requests</h1>
+                            <div className='testreqsinner'>
+                            
+                                {this.state.posts.length > 0 &&
+                                    this.state.posts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
+                                }
+                                {this.state.posts.length < 6 && this.props.username &&
+                                    <button id='testCreateJob'>Create New Request</button>
+                                }
+                                
+                            </div>
+                        </div>
+
+                    </div>
+                }
+
+                {/* All open requests */}
+
+                {this.props.authID && this.state.links.openJobs === true &&
+                    <div id='profileLink'>
+                        <div className='testreqsouter'>
+                            <h1>Available Jobs</h1>
+                            <div className='testreqsinnerRunner'>
+                                {this.state.openJobs.length > 0 &&
+                                    this.state.openJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerRow={this.runnerRow}/>)
+                                }
+                        
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {/* Accepted Jobs */}
+
+                {this.props.authID && this.state.links.userJobs === true &&
+                    <div id='profileLink'>
+                        <div className='testreqsouter'>
+                            <h1>Available Jobs</h1>
+                            <div className='testreqsinnerRunner'>
+                                {this.state.acceptedJobs.length > 0 &&
+                                    this.state.acceptedJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} acceptedRow={this.acceptedRow}/>)
+                                }
+                        
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                {console.log('state', this.state, 'props', this.props)}
             </div>
         )
     }
@@ -139,4 +319,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { userInfo, closeMenu })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner })(TestPage));
