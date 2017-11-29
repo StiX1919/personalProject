@@ -22,6 +22,7 @@ const POST_ID = 'POST_ID'
 const POST_USER = 'POST_USER'
 const EDIT_POST = 'EDIT_POST'
 const POST_POP_UP = 'POST_POP_UP'
+const CLOSE_POST = 'CLOSE_POST'
 
 const OPENMENU = 'OPENMENU'
 const CLOSE_MENU = 'CLOSE_MENU'
@@ -50,7 +51,6 @@ const initialState = {
         dropdown: false,
         comment: '',
         initialLoad: false,
-        postPopUp: false
     
 }
 
@@ -211,10 +211,15 @@ export function editPost(postid){
     }
 }
 
-export function postPopUp(){
+export function postView(){
     return {
-        type: POST_POP_UP,
-        payload: true
+        type: POST_POP_UP
+    }
+}
+
+export function closePost(){
+    return {
+        type: CLOSE_POST
     }
 }
 
@@ -307,20 +312,31 @@ export default function reducer(state=initialState, action) {
         case LOGOUT_WIPE: {
             return initialState
         }
-        
-        case EDIT_POST: {
+
+        case EDIT_POST + '_PENDING': {
             return Object.assign({}, state, {
+                isLoading: true
+            })
+        }
+        case EDIT_POST + '_FULFILLED': {
+            return Object.assign({}, state, {
+                isLoading: false,
                 postTitle: action.payload.post_title, 
                 postSubTitle: action.payload.post_sub, 
                 postDetails: action.payload.post, 
-                posterID: action.payload.userid, 
-                postRunner: action.payload.runnerid
+                posterName: action.payload.username, 
+                postRunner: action.payload.runnerid,
+                postIsRunner: action.payload.runner,
+                posterPic: action.payload.profilepic
             })
         }
         case POST_POP_UP:  {
             return Object.assign({}, state, {
-                postPopUp: action.payload
+                postPopUp: true
             })
+        }
+        case CLOSE_POST: {
+            return Object.assign({}, state, {postPopUp: false})
         }
     
         default:

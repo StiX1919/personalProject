@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, postPopUp } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost } from '../../ducks/reducer'
 
 import PostCards from '../PostCards/PostCards'
 import Header from '../Header/Header'
@@ -89,18 +89,23 @@ class TestPage extends Component {
 
     // page routing
     goHome(){
+        this.props.closePost()
         this.setState({links:{home: true, profile: false, userReqs: false, openJobs: false, userJobs: false}})
     }
     goProfile(){
+        this.props.closePost()
         this.setState({links:{home: false, profile: true, userReqs: false, openJobs: false, userJobs: false}})
     }
     goReqs(){
+        this.props.closePost()
         this.setState({links:{home: false, profile: false, userReqs: true, openJobs: false, userJobs: false}})
     }
     goOpen(){
+        this.props.closePost()
         this.setState({links:{home: false, profile: false, userReqs: false, openJobs: true, userJobs: false}})
     }
     goRun(){
+        this.props.closePost()
         this.setState({links:{home: false, profile: false, userReqs: false, openJobs: false, userJobs: true}})
     }
     
@@ -327,12 +332,24 @@ class TestPage extends Component {
 
                 {/* Post pop up view */}
 
-                {this.props.authID && this.props.postPopUp === true &&
-                    <h1>Yo Bueno</h1>
+                {this.props.postPopUp === true &&
+                    <div id='testPostView'>
+                        <div id='testPost'>
+                            <div className='closePost' onClick={this.props.closePost}>X</div>
+                            <div id='testPostInfo'>
+                                <img src={this.props.posterPic} />
+                                <h2>{this.props.posterName}</h2>
+                                <h4>{this.props.postTitle}</h4>
+                                <h5>{this.props.postSubTitle}</h5>
+                                <h6>{this.props.postDetails}</h6>
+                            </div>
+                        </div>
+                    </div>
                 }
+                
 
 
-                {console.log('state', this.state, 'props', this.props)}
+                {console.log('state', this.state, 'props', this.props, 'postpopup', this.props.postPopUp)}
             </div>
         )
     }
@@ -340,4 +357,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, postPopUp })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost })(TestPage));

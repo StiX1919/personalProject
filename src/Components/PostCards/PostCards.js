@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import { idPost, postUser, editPost, postPopUp } from '../../ducks/reducer'
+import { idPost, postUser, editPost, postView } from '../../ducks/reducer'
 
 import './PostCards.css'
 
@@ -23,7 +23,7 @@ class PostCards extends Component {
     postEdit(){
         // this.props.idPost(this.props.PID)
         // this.props.postUser(this.props.UID)
-        this.props.postPopUp()
+        this.props.postView()
         this.props.editPost(this.props.PID)
         
         console.log('edit props',this.props)
@@ -168,4 +168,4 @@ class PostCards extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postPopUp })(PostCards));
+export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView })(PostCards));
