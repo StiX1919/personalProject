@@ -122,7 +122,12 @@ app.get('/api/preLogin', (req, res) => {
     res.status(200).json(req.user)
 })
 
-app.get('/logout', logout());
+// app.get('/logout', logout());
+app.get('/logout', function(req, res) {
+    req.session.destroy;
+    req.logout()
+    res.redirect('http://localhost:3000/testPage')
+  })
 
 
 //LISTENING

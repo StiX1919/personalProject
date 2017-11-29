@@ -26,17 +26,7 @@ class ViewPost extends Component {
     
     componentWillMount(){
         if(this.props.postID){
-            axios.get(`/api/editPost/${this.props.postID}`).then(response => {
-                return this.setState({title: response.data[0].post_title, sub: response.data[0].post_sub, post: response.data[0].post, userID: response.data[0].userid, runnerID: response.data[0].runnerid, PID: response.data[0].id})
-            })
-            axios.get(`/api/poster/${this.props.postUser}`).then(response => {
-                console.log('state', this.state)
-                return this.setState({username: response.data[0].username, city: response.data[0].city, profilePic: response.data[0].profilepic})
-            })
-            axios.get(`/api/getComments/${this.props.postID}`).then(response => {
-                console.log('comments', response)
-                return this.setState({comments: response.data})
-            })
+            
             
         }
     }

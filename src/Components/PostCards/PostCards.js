@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import { idPost, postUser, closeMenu } from '../../ducks/reducer'
+import { idPost, postUser, editPost, postPopUp } from '../../ducks/reducer'
 
 import './PostCards.css'
 
@@ -21,9 +21,20 @@ class PostCards extends Component {
 
 
     postEdit(){
-        this.props.idPost(this.props.PID)
-        this.props.postUser(this.props.UID)
-        this.props.closeMenu()
+        // this.props.idPost(this.props.PID)
+        // this.props.postUser(this.props.UID)
+        this.props.postPopUp()
+        this.props.editPost(this.props.PID)
+        
+        console.log('edit props',this.props)
+        // axios.get(`/api/poster/${this.props.postUser}`).then(response => {
+        //     console.log('state', this.state)
+        //     return this.setState({username: response.data[0].username, city: response.data[0].city, profilePic: response.data[0].profilepic})
+        // })
+        // axios.get(`/api/getComments/${this.props.PID}`).then(response => {
+        //     console.log('comments', response)
+        //     return this.setState({comments: response.data})
+        // })
     }
 
     deletePost(){
@@ -82,7 +93,7 @@ class PostCards extends Component {
                             </div>
                         </div>
                         <div className='buttons'>
-                            <Link to='/viewPost'><button className='button' onClick={this.postEdit}>View Post</button></Link>
+                            <button className='button' onClick={this.postEdit}>View Post</button>
                         
                             <button className='button' onClick={this.deletePost}>Delete Post</button>
                         </div>
@@ -114,7 +125,7 @@ class PostCards extends Component {
                     </div>
                     <div className='buttons'>
                         <button className='button' onClick={this.acceptJob}>Accept Job</button>
-                        <Link to='/viewPost'><button className='button' onClick={this.postEdit}>View Post</button></Link>
+                        <button className='button' onClick={this.postEdit}>View Post</button>
                     </div>
                 </div>
             
@@ -141,7 +152,7 @@ class PostCards extends Component {
                     </div>
                     </div>
                     <div className='buttons'>
-                        <Link to='/viewPost'><button className='button' onClick={this.postEdit}>View Post</button></Link>
+                        <button className='button' onClick={this.postEdit}>View Post</button>
                     </div>
                 </div>
             
@@ -157,4 +168,4 @@ class PostCards extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { idPost, postUser, closeMenu })(PostCards));
+export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postPopUp })(PostCards));

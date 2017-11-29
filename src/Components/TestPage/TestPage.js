@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, postPopUp } from '../../ducks/reducer'
 
 import PostCards from '../PostCards/PostCards'
 import Header from '../Header/Header'
@@ -56,9 +56,11 @@ class TestPage extends Component {
                 this.props.userInfo()
                 console.log('response',response.data)
                 axios.get('/api/posts').then(res => {
+                    
                     this.setState({posts: res.data}) 
                 })
                 axios.get('/api/openJobs').then(res => {
+                    console.log('openjobs', res.data)
                     this.setState({openJobs: res.data})
                 })
                 axios.get('/api/acceptedJobs').then(res => {
@@ -323,6 +325,12 @@ class TestPage extends Component {
                     </div>
                 }
 
+                {/* Post pop up view */}
+
+                {this.props.authID && this.props.postPopUp === true &&
+                    <h1>Yo Bueno</h1>
+                }
+
 
                 {console.log('state', this.state, 'props', this.props)}
             </div>
@@ -332,4 +340,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, postPopUp })(TestPage));

@@ -21,6 +21,7 @@ const CHANGE_COMMENT = 'CHANGE_COMMENT'
 const POST_ID = 'POST_ID'
 const POST_USER = 'POST_USER'
 const EDIT_POST = 'EDIT_POST'
+const POST_POP_UP = 'POST_POP_UP'
 
 const OPENMENU = 'OPENMENU'
 const CLOSE_MENU = 'CLOSE_MENU'
@@ -48,7 +49,8 @@ const initialState = {
         postID: null,
         dropdown: false,
         comment: '',
-        initialLoad: false
+        initialLoad: false,
+        postPopUp: false
     
 }
 
@@ -199,7 +201,22 @@ export function setPost(title, sub, details){
     }
 }
 
+export function editPost(postid){
+    return {
+        type: EDIT_POST,
+        payload: axios.get(`/api/editPost/${postid}`).then(response => {
+            console.log('edit post', response.data[0])
+            return response.data[0]
+        })
+    }
+}
 
+export function postPopUp(){
+    return {
+        type: POST_POP_UP,
+        payload: true
+    }
+}
 
 
 
@@ -291,6 +308,20 @@ export default function reducer(state=initialState, action) {
             return initialState
         }
         
+        case EDIT_POST: {
+            return Object.assign({}, state, {
+                postTitle: action.payload.post_title, 
+                postSubTitle: action.payload.post_sub, 
+                postDetails: action.payload.post, 
+                posterID: action.payload.userid, 
+                postRunner: action.payload.runnerid
+            })
+        }
+        case POST_POP_UP:  {
+            return Object.assign({}, state, {
+                postPopUp: action.payload
+            })
+        }
     
         default:
             return state
