@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe } from '../../ducks/reducer'
 
 import PostCards from '../PostCards/PostCards'
 import Header from '../Header/Header'
@@ -31,6 +31,8 @@ class TestPage extends Component {
             }
         }
 
+        this.handleLogin = this.handleLogin.bind(this)
+
         this.goHome = this.goHome.bind(this)
         this.goProfile = this.goProfile.bind(this)
         this.goReqs = this.goReqs.bind(this)
@@ -48,27 +50,38 @@ class TestPage extends Component {
         this.acceptedRow = this.acceptedRow.bind(this)
     }
 
-    componentDidMount(){
-        this.props.userInfo()
-        axios.get('/api/posts').then(response => {
-            console.log('response', response)
-            this.setState({posts: response.data}) 
+    componentWillMount(){
+        axios.get('/api/preLogin').then(response => {
+            if (response.data){
+                this.props.userInfo()
+                console.log('response',response.data)
+                axios.get('/api/posts').then(res => {
+                    this.setState({posts: res.data}) 
+                })
+                axios.get('/api/openJobs').then(res => {
+                    this.setState({openJobs: res.data})
+                })
+                axios.get('/api/acceptedJobs').then(res => {
+                    this.setState({acceptedJobs: res.data})
+                })
+            }
         })
-        axios.get('/api/openJobs').then(response => {
-            this.setState({openJobs: response.data})
-        })
-        axios.get('/api/acceptedJobs').then(response => {
-            this.setState({acceptedJobs: response.data})
-        })
+        console.log('logged in?', this.state.loggedin)
+        
     }
+    
+    
 
     handleLogin(){
         window.location.href= 'http://localhost:3001/login'
+
     }
 
     handleLogout(){
-        window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000'
+        
+        window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000/testPage'
         axios.get('/logout')
+        this.props.logoutWipe()
     }
 
 
@@ -299,7 +312,7 @@ class TestPage extends Component {
                 {this.props.authID && this.state.links.userJobs === true &&
                     <div id='profileLink'>
                         <div className='testreqsouter'>
-                            <h1>Available Jobs</h1>
+                            <h1>Accepted Jobs</h1>
                             <div className='testreqsinnerRunner'>
                                 {this.state.acceptedJobs.length > 0 &&
                                     this.state.acceptedJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} acceptedRow={this.acceptedRow}/>)
@@ -319,4 +332,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe })(TestPage));

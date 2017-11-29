@@ -1,1 +1,1 @@
-select * from posts where runnerid is null and userid != $1
+SELECT * FROM posts p, users u WHERE u.id = p.userid and userid != $1;

@@ -78,7 +78,7 @@ passport.deserializeUser(function(obj, done) {
 })
 
 app.get(
-    '/login', passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/Home'}))
+    '/login', passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/testPage'}))
 
 
 
@@ -116,6 +116,11 @@ app.get('/api/poster/:ID', posterInfo)
 app.delete('/api/deletePost/:ID', deletePost)
 
 app.post('/api/acceptJob/:PID', acceptJob)
+
+app.get('/api/preLogin', (req, res) => {
+    console.log('req.user', req.user)
+    res.status(200).json(req.user)
+})
 
 app.get('/logout', logout());
 

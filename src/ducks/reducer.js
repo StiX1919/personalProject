@@ -27,12 +27,14 @@ const CLOSE_MENU = 'CLOSE_MENU'
 
 const SET_POST = 'SET_POST'
 
+const LOGOUT_WIPE = 'LOGOUT_WIPE'
+
 
 
 //Initial State
 
 const initialState = {
-        authID: 0,
+        authID: null,
         runner: 0,
         username: '',
         city: '',
@@ -45,12 +47,19 @@ const initialState = {
         post: '',
         postID: null,
         dropdown: false,
-        comment: ''
+        comment: '',
+        initialLoad: false
     
 }
 
 //Action Creators
 
+export function logoutWipe(){
+    return {
+        type: LOGOUT_WIPE,
+        payload: initialState
+    }
+}
 
 export function requestUser(){
     console.log('HIT');
@@ -196,6 +205,7 @@ export function setPost(title, sub, details){
 
 
 
+
 //Reducer
 
 export default function reducer(state=initialState, action) {
@@ -276,6 +286,11 @@ export default function reducer(state=initialState, action) {
         case SET_POST: {
             return Object.assign({}, state, {postTitle: action.payload.title, subTitle: action.payload.sub, post: action.payload.details})
         }
+
+        case LOGOUT_WIPE: {
+            return initialState
+        }
+        
     
         default:
             return state
