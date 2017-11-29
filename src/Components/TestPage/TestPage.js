@@ -19,10 +19,19 @@ class TestPage extends Component {
             posts: {},
             openJobs: {},
             acceptedJobs: {},
-            dropdown: false
+            links: {
+                home: true,
+                profile: false,
+                userReqs: false, 
+                openJobs: false, 
+                userJobs: false
+            }
         }
-        this.runnerRow = this.runnerRow.bind(this)
-        this.acceptedRow = this.acceptedRow.bind(this)
+        this.goHome = this.goHome.bind(this)
+        this.goProfile = this.goProfile.bind(this)
+        this.goReqs = this.goReqs.bind(this)
+        this.goOpen = this.goOpen.bind(this)
+        this.goRun = this.goRun.bind(this)
     }
 
     componentDidMount(){
@@ -47,16 +56,21 @@ class TestPage extends Component {
         window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000'
         axios.get('/logout')
     }
-
-
-    runnerRow(){
-
+    goHome(){
+        this.setState({links:{home: true, profile: false, userReqs: false, openJobs: false, userJobs: false}})
     }
-
-    acceptedRow(){
-
+    goProfile(){
+        this.setState({links:{home: false, profile: true, userReqs: false, openJobs: false, userJobs: false}})
     }
-    
+    goReqs(){
+        this.setState({links:{home: false, profile: false, userReqs: true, openJobs: false, userJobs: false}})
+    }
+    goOpen(){
+        this.setState({links:{home: false, profile: false, userReqs: false, openJobs: true, userJobs: false}})
+    }
+    goRun(){
+        this.setState({links:{home: false, profile: false, userReqs: false, openJobs: false, userJobs: true}})
+    }
     
     
 
@@ -75,20 +89,49 @@ class TestPage extends Component {
                     {this.props.authID &&
                     <ul id='links'>
                     
-                        <li className='headerLink'>Home</li>
-                        <li className='headerLink'>Profile</li>
-                        <li className='headerLink'>View your jobs</li>
+                        <li className='headerLink' onClick={this.goHome}>Home</li>
+                        <li className='headerLink' onClick={this.goProfile}>Profile</li>
+                        <li className='headerLink' onClick={this.goReqs}>View your jobs</li>
                         <li className='headerLink'>Create job request</li>
                         {this.props.runner === 1 &&
-                            <li className='headerLink'>Open Jobs</li>
+                            <li className='headerLink' onClick={this.goOpen}>Open Jobs</li>
                         }
                         {this.props.runner === 1 &&
-                            <li className='headerLink'>Accepted Jobs</li>
+                            <li className='headerLink' onClick={this.goRun}>Accepted Jobs</li>
                         }
+                        <li className='headerLink' onClick={this.handleLogout}>Logout</li>
 
                     </ul>
                     }
                 </div>
+
+                {/* view for non-logged in users */}
+
+                {!this.props.authID &&
+                <div>
+                    <div className='homeView' id='homeimg1'> 
+                        <div id='imgbox'>
+                        <div className='homeCircle'>
+                            <img src='http://logo.pizza/img/stick-runner/stick-runner.png' className='homeLogo'/>
+                        </div>
+                        <h1 className='homeTitle'>RUNNER</h1>
+                        </div>
+                        <h1>For those too bored to do their own chores.</h1>
+                    </div>
+                    <img className='homeView' id='homeimg2' src='https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/VC_Questionnaire_AlexHonnold_ED_29790110_1280x640.jpg'/>
+                    <div className='homeView' id='hometxt2'>Post Jobs you need done so you can enjoy your vacation or free time</div>
+                    <div className='homeView' id='postcircle2'><img src='http://cdn.onlinewebfonts.com/svg/img_420677.png' id='postlogo'/></div>
+                    <img className='homeView' id='homeimg3' src='https://s-i.huffpost.com/gen/2349884/images/o-CHORES-FOR-KIDS-facebook.jpg'/>
+                    <div className='homeView' id='runcircle3'><img src='http://logo.pizza/img/stick-runner/stick-runner.png' id='runlogo'/></div>
+                    <div className='homeView' id='hometxt3'>Become a RUNNER and do jobs for others</div>
+                </div>
+                }
+
+                {/* home view for logged in users */}
+                {this.props.authID && this.state.links.home === true &&
+                    <h1>Thanks for logging in {this.props.username}</h1>
+                }
+                {console.log(this.state)}
             </div>
         )
     }

@@ -32,7 +32,7 @@ const SET_POST = 'SET_POST'
 //Initial State
 
 const initialState = {
-        authID: '',
+        authID: 0,
         runner: 0,
         username: '',
         city: '',
