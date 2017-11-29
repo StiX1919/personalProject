@@ -4,8 +4,9 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment } from '../../ducks/reducer'
 
+import CommentCards from '../CommentCards/CommentCards'
 import PostCards from '../PostCards/PostCards'
 import Header from '../Header/Header'
 
@@ -48,9 +49,12 @@ class TestPage extends Component {
 
         this.runnerRow = this.runnerRow.bind(this)
         this.acceptedRow = this.acceptedRow.bind(this)
+
+        this.postComment = this.postComment.bind(this)
     }
 
     componentWillMount(){
+        
         axios.get('/api/preLogin').then(response => {
             if (response.data){
                 this.props.userInfo()
@@ -124,6 +128,12 @@ class TestPage extends Component {
            return res.data})
        
    }
+
+    postComment(){
+        axios.post(`/api/addComment/${this.props.postID}`, this.props).then(res=> {
+        return res.data})
+   
+    }
     
 
    runnerRow() {
@@ -166,7 +176,7 @@ class TestPage extends Component {
 
                 {/* view for non-logged in users */}
 
-                {!this.props.authID &&
+                {!this.props.authID && 
                 <div>
                     <div className='homeView' id='homeimg1'> 
                         <div id='imgbox'>
@@ -188,7 +198,7 @@ class TestPage extends Component {
 
                 {/* home view for logged in users */}
 
-                {this.props.authID && this.state.links.home === true &&
+                {this.props.authID && this.state.links.home === true && this.props.isLoading === false &&
                     <h1>Thanks for logging in {this.props.username}</h1>
                 }
 
@@ -337,19 +347,41 @@ class TestPage extends Component {
                         <div id='testPost'>
                             <div className='closePost' onClick={this.props.closePost}>X</div>
                             <div id='testPostInfo'>
-                                <img src={this.props.posterPic} />
-                                <h2>{this.props.posterName}</h2>
-                                <h4>{this.props.postTitle}</h4>
-                                <h5>{this.props.postSubTitle}</h5>
-                                <h6>{this.props.postDetails}</h6>
+                                <div id='testPostHeader'>
+                                    <img src={this.props.posterPic} />
+                                    <h1>{this.props.posterName}</h1>
+                                    <div>
+                                        <h2>{this.props.postTitle}</h2>
+                                        <h4>{this.props.postSubTitle}</h4>
+                                    </div>
+                                </div>
+                                <h4>{this.props.postDetails}</h4>
+                            </div>
+                            <h2>Comments</h2>
+                            <div id='testCommentsContainer'>
+                                <div id='testCommentList'>
+                                {this.props.postComments.length > 0 &&
+                                    this.props.postComments.map( comment => <CommentCards username={comment.username} commentpic={comment.profilepic} usercomment={comment.comment} runner={comment.runner}/>)
+                                }
+                                <h4>Leave a comment</h4>
+                                <textarea onChange={this.props.handleComment} className='test-comment-field' rows="10" cols="170" placeholder='Thoughts?'></textarea>
+                                
+                                {this.props.comment.length < 1 &&
+                                    <button>Post Comment</button>
+                                }
+                                {this.props.comment.length > 0 &&
+                                    <button onClick={this.postComment}>Post Comment</button>
+                                }
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
                 }
                 
+                
 
-
-                {console.log('state', this.state, 'props', this.props, 'postpopup', this.props.postPopUp)}
+                {console.log('state', this.state, 'props', this.props)}
             </div>
         )
     }
@@ -357,4 +389,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment })(TestPage));

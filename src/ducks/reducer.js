@@ -28,6 +28,7 @@ const OPENMENU = 'OPENMENU'
 const CLOSE_MENU = 'CLOSE_MENU'
 
 const SET_POST = 'SET_POST'
+const GET_COMMENTS = 'GET_COMMENTS'
 
 const LOGOUT_WIPE = 'LOGOUT_WIPE'
 
@@ -51,8 +52,11 @@ const initialState = {
         dropdown: false,
         comment: '',
         initialLoad: false,
+        isLoading: true,
+        postComments: []
     
 }
+
 
 //Action Creators
 
@@ -211,6 +215,16 @@ export function editPost(postid){
     }
 }
 
+export function getComments(postid){
+    return {
+        type: GET_COMMENTS,
+        payload: axios.get(`/api/getComments/${postid}`).then(response => {
+            console.log('comments', response)
+            return response.data
+        })
+    }
+}
+
 export function postView(){
     return {
         type: POST_POP_UP
@@ -327,9 +341,22 @@ export default function reducer(state=initialState, action) {
                 posterName: action.payload.username, 
                 postRunner: action.payload.runnerid,
                 postIsRunner: action.payload.runner,
-                posterPic: action.payload.profilepic
+                posterPic: action.payload.profilepic,
+                postID: action.payload.id
             })
         }
+
+        case GET_COMMENTS + '_PENDING': {
+            return Object.assign({},state, {
+                isLoading: true
+            })
+        }
+        case GET_COMMENTS + '_FULFILLED': {
+            return Object.assign({}, state, {
+                postComments: action.payload
+            })
+        }
+
         case POST_POP_UP:  {
             return Object.assign({}, state, {
                 postPopUp: true
@@ -338,6 +365,7 @@ export default function reducer(state=initialState, action) {
         case CLOSE_POST: {
             return Object.assign({}, state, {postPopUp: false})
         }
+        
     
         default:
             return state

@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import { idPost, postUser, editPost, postView } from '../../ducks/reducer'
+import { idPost, postUser, editPost, postView, getComments } from '../../ducks/reducer'
 
 import './PostCards.css'
 
@@ -25,16 +25,14 @@ class PostCards extends Component {
         // this.props.postUser(this.props.UID)
         this.props.postView()
         this.props.editPost(this.props.PID)
+        this.props.getComments(this.props.PID)
         
         console.log('edit props',this.props)
         // axios.get(`/api/poster/${this.props.postUser}`).then(response => {
         //     console.log('state', this.state)
         //     return this.setState({username: response.data[0].username, city: response.data[0].city, profilePic: response.data[0].profilepic})
         // })
-        // axios.get(`/api/getComments/${this.props.PID}`).then(response => {
-        //     console.log('comments', response)
-        //     return this.setState({comments: response.data})
-        // })
+        
     }
 
     deletePost(){
@@ -168,4 +166,4 @@ class PostCards extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView })(PostCards));
+export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView, getComments })(PostCards));
