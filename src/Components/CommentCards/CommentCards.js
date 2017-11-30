@@ -26,7 +26,7 @@ class CommentCards extends Component {
             <div id='commentCard'>
                 <div id='commentuser'>
                 <img className='commentPic' src={this.props.commentpic}/>
-                <h4>{this.props.username}</h4>
+                <h4>{this.props.postuser}</h4>
                 </div>
                 <h4>{this.props.usercomment}</h4>
 

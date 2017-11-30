@@ -103,22 +103,27 @@ class TestPage extends Component {
 
     // page routing
     goHome(){
+        this.closeNewPost()
         this.props.closePost()
         this.setState({links:{home: true, profile: false, userReqs: false, openJobs: false, userJobs: false}})
     }
     goProfile(){
+        this.closeNewPost()
         this.props.closePost()
         this.setState({links:{home: false, profile: true, userReqs: false, openJobs: false, userJobs: false}})
     }
     goReqs(){
+        this.closeNewPost()
         this.props.closePost()
         this.setState({links:{home: false, profile: false, userReqs: true, openJobs: false, userJobs: false}})
     }
     goOpen(){
+        this.closeNewPost()
         this.props.closePost()
         this.setState({links:{home: false, profile: false, userReqs: false, openJobs: true, userJobs: false}})
     }
     goRun(){
+        this.closeNewPost()
         this.props.closePost()
         this.setState({links:{home: false, profile: false, userReqs: false, openJobs: false, userJobs: true}})
     }
@@ -153,6 +158,8 @@ class TestPage extends Component {
 
     makeNewPost(){
         this.setState({newPost: true})
+
+        this.props.closePost()
     }
 
     closeNewPost(){
@@ -395,7 +402,7 @@ class TestPage extends Component {
                             <div id='testCommentsContainer'>
                                 <div id='testCommentList'>
                                 {this.props.postComments.length > 0 &&
-                                    this.props.postComments.map( comment => <CommentCards username={comment.username} commentpic={comment.profilepic} usercomment={comment.comment} runner={comment.runner}/>)
+                                    this.props.postComments.map( comment => <CommentCards postuser={comment.username} commentpic={comment.profilepic} usercomment={comment.comment} runner={comment.runner}/>)
                                 }
                                 <h4>Leave a comment</h4>
                                 <textarea onChange={this.props.handleComment} className='test-comment-field' rows="10" cols="170" placeholder='Thoughts?'></textarea>
