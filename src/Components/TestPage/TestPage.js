@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost } from '../../ducks/reducer'
 
 import CommentCards from '../CommentCards/CommentCards'
 import PostCards from '../PostCards/PostCards'
@@ -23,6 +23,8 @@ class TestPage extends Component {
             openJobs: {},
             acceptedJobs: {},
             edit: false,
+            wrapper: true,
+            newPost: false,
             links: {
                 home: true,
                 profile: false,
@@ -51,6 +53,14 @@ class TestPage extends Component {
         this.acceptedRow = this.acceptedRow.bind(this)
 
         this.postComment = this.postComment.bind(this)
+
+
+        this.closeHeader = this.closeHeader.bind(this)
+
+        this.makeNewPost = this.makeNewPost.bind(this)
+        this.closeNewPost = this.closeNewPost.bind(this)
+
+        this.postJob = this.postJob.bind(this)
     }
 
     componentWillMount(){
@@ -134,6 +144,20 @@ class TestPage extends Component {
         return res.data})
    
     }
+
+    postJob(){
+        axios.post('/api/addJob', this.props).then(res=> {
+           return res.data})
+       
+   }
+
+    makeNewPost(){
+        this.setState({newPost: true})
+    }
+
+    closeNewPost(){
+        this.setState({newPost: false})
+    }
     
 
    runnerRow() {
@@ -144,10 +168,18 @@ class TestPage extends Component {
    }
 
 
+   closeHeader(){
+        if(this.state.wrapper === true){
+            this.setState({wrapper: false})
+        }
+       else this.setState({wrapper: true})
+   }
+
+
     render(){
         return (
             <div id='wholePage'>
-                <div id='headerwrap'>
+                <div id={this.state.wrapper ? 'headerwrapOpen' : 'headerwrapClose'}>
                     <div className='logoCircle'>
                         <img src='http://logo.pizza/img/stick-runner/stick-runner.png' id='logo'/>
                     </div>
@@ -161,7 +193,7 @@ class TestPage extends Component {
                         <li className='headerLink' onClick={this.goHome}>Home</li>
                         <li className='headerLink' onClick={this.goProfile}>Profile</li>
                         <li className='headerLink' onClick={this.goReqs}>View your jobs</li>
-                        <li className='headerLink'>Create job request</li>
+                        <li className='headerLink' onClick={this.makeNewPost}>Create job request</li>
                         {this.props.runner === 1 &&
                             <li className='headerLink' onClick={this.goOpen}>Open Jobs</li>
                         }
@@ -172,8 +204,10 @@ class TestPage extends Component {
 
                     </ul>
                     }
+                    
                 </div>
-
+                
+                <div className={this.state.wrapper ? 'wrapperControlOpen' : 'wrapperControlClose'} onClick={this.closeHeader}><img id={this.state.wrapper ? 'wrapperImgOpen' : 'wrapperImgClose'} src='http://cdn.onlinewebfonts.com/svg/img_125564.png'/></div>
                 {/* view for non-logged in users */}
 
                 {!this.props.authID && 
@@ -299,7 +333,7 @@ class TestPage extends Component {
                                     this.state.posts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
                                 }
                                 {this.state.posts.length < 6 && this.props.username &&
-                                    <button id='testCreateJob'>Create New Request</button>
+                                    <button id='testCreateJob' onClick={this.makeNewPost}>Create New Request</button>
                                 }
                                 
                             </div>
@@ -378,6 +412,38 @@ class TestPage extends Component {
                         
                     </div>
                 }
+
+                {/* creating a job request */}
+
+                {this.state.newPost === true &&
+                <div id='testPostView'>
+                    <div id='testPost'>
+                        <div className='closePost' onClick={this.closeNewPost}>X</div>
+                        <h1>Create a job for someone else to do</h1>
+                        
+                        <div id='newJobInfo'>
+                            <div id='newJobHeader'>
+                                <div className='titleDiv'>
+                                <h2>Job Title</h2>
+                                <input className="newPostInput" type='text' onChange={this.props.handleTitle}/>
+                                </div>
+                                <div className='titleDiv'>
+                                <h2>Subtitle</h2>
+                                <input className="newPostInput" type='text' onChange={this.props.handleSub}/>
+                                </div>
+                                <h3></h3>
+                                <button id='postJobButton' onClick={this.postJob}>Post Job</button>
+                            </div>
+                            <div className='field-box'>
+                                <textarea onChange={this.props.handlePost} className='input-field' rows="10" cols="190" placeholder='Details'></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                }
                 
                 
 
@@ -389,4 +455,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost })(TestPage));

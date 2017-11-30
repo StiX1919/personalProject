@@ -6,15 +6,147 @@
     background-image: url('https://websitica.com/wp-content/uploads/2016/05/Gray-plain-website-background.jpg')
 }
 
-#headerwrap {
+#headerwrapOpen {
     border-right: solid rgba(255, 255, 255, 0.753);
     height: 90%;
     width: 17.5%;
     display: flex;
     flex-direction: column;
     justify-content: center flex-start;
-    align-items: center
+    align-items: center;
+    animation: wrapenter 2s forwards
 }
+
+@keyframes wrapenter {
+    from {
+        transform: translateX(-340px);
+        width: 0%
+    }
+    
+    to {
+        transform: translateX(0px); 
+        width: 17.5%
+    }
+}
+
+#headerwrapClose {
+    border-right: solid rgba(255, 255, 255, 0.753);
+    height: 90%;
+    width: 17.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center flex-start;
+    align-items: center;
+    animation: wrapclose 3s forwards
+}
+
+@keyframes wrapclose {
+    from {
+        transform: translateX(0px);
+        width: 17.5%
+    }
+    66% {
+        transform: translateX(-340px);
+        width: 0%
+    }
+    to {
+        transform: translateX(-100px);
+        width: 0%
+    }
+}
+
+.wrapperControlOpen {
+    width: 40px;
+    height: 70px;
+    border-top-right-radius: 20%;
+    border-bottom-right-radius: 20%;
+
+    background: rgba(255, 255, 255, 0.753);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: controlClose 3s forwards
+}
+@keyframes controlClose {
+    from {
+        transform: translateX(0px)
+    }
+    15% {
+        transform: translateX(-160px)
+    }
+    
+    70% {
+        transform: translateX(0px)
+    }
+    to {
+        transform: translateX(0px)
+    }
+}
+
+.wrapperControlClose {
+    width: 40px;
+    height: 70px;
+    border-top-right-radius: 20%;
+    border-bottom-right-radius: 20%;
+
+    background: rgba(255, 255, 255, 0.753);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: controlOpen 3s forwards
+}
+@keyframes controlOpen {
+    from {
+        transform: translateX(0px)
+    }
+    66% {
+        transform: translateX(-340px)
+    }
+    to {
+        transform: translateX(0px)
+    }
+}
+
+#wrapperImgOpen {
+    width: 35px;
+    height: 35px;
+    animation: Imgopen 2.5s forwards;
+    margin: 0;
+}
+
+@keyframes Imgopen {
+    from {
+        transform: rotate(-90deg) rotateY(180deg);
+
+    }
+    to {
+        
+        transform: rotate(90deg) rotateY(0deg);
+    }
+}
+
+#wrapperImgClose {
+    width: 35px;
+    height: 35px;
+    animation: Imgclose 3s forwards;
+    margin: 0;
+    transform: rotate(-90deg)
+}
+
+@keyframes Imgclose {
+    from {
+        transform: rotate(90deg) 
+    }
+    50% {
+        transform: rotate(90deg)
+    }
+    to {
+        transform: rotate(-90deg) 
+    }
+}
+
+
+
 .logoCircle {
     height: 20% ;
     width: 55%;
