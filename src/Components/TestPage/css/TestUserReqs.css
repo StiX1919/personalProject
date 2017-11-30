@@ -55,6 +55,28 @@
     justify-content: center;
     align-items: center
 }
+#testPostViewFull {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.329);
+    position: absolute;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* animation: fill 3s forwards */
+}
+@keyframes fill {
+    from {
+        width: 82.3%;
+    }
+    to {
+        width: 100%
+    }
+}
+
+
+
 #testPost {
     height: 70%;
     width: 60%;

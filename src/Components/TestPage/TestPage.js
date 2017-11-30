@@ -115,6 +115,9 @@ class TestPage extends Component {
     goReqs(){
         this.closeNewPost()
         this.props.closePost()
+        // axios.get('/api/posts').then(res => {
+        //     this.setState({posts: res.data}) 
+        // })
         this.setState({links:{home: false, profile: false, userReqs: true, openJobs: false, userJobs: false}})
     }
     goOpen(){
@@ -145,14 +148,45 @@ class TestPage extends Component {
    }
 
     postComment(){
-        axios.post(`/api/addComment/${this.props.postID}`, this.props).then(res=> {
-        return res.data})
+        // axios.post(`/api/addComment/${this.props.postID}`, this.props).then(res=> {
+        //     return res.data
+        // })
+
+        
+
+        let addingComment = this.state.posts
+        addingComment.push({
+            post_title: this.props.postTitle, 
+            post_sub: this.props.subTitle, 
+            post: this.props.post,
+            username: this.props.username, 
+            profilepic: this.props.profilepic
+         })
+         console.log(addingComment)
    
     }
 
     postJob(){
         axios.post('/api/addJob', this.props).then(res=> {
            return res.data})
+
+
+           
+
+           let addingJob = this.state.posts
+           addingJob.push({
+               post_title: this.props.postTitle, 
+               post_sub: this.props.subTitle, 
+               post: this.props.post,
+               username: this.props.username, 
+               profilepic: this.props.profilepic
+            })
+            console.log(addingJob)
+            this.closeNewPost()
+            axios.get('/api/posts').then(res => {
+                
+                this.setState({posts: res.data}) 
+            })
        
    }
 
@@ -183,6 +217,11 @@ class TestPage extends Component {
    }
 
 
+   finishProfile(){
+       alert('Please finish your profile')
+   }
+
+
     render(){
         return (
             <div id='wholePage'>
@@ -199,13 +238,13 @@ class TestPage extends Component {
                     
                         <li className='headerLink' onClick={this.goHome}>Home</li>
                         <li className='headerLink' onClick={this.goProfile}>Profile</li>
-                        <li className='headerLink' onClick={this.goReqs}>View your jobs</li>
-                        <li className='headerLink' onClick={this.makeNewPost}>Create job request</li>
+                        <li className='headerLink' onClick={this.props.username ? this.goReqs : this.finishProfile}>View your jobs</li>
+                        <li className='headerLink' onClick={this.props.username ? this.makeNewPost : this.finishProfile}>Create job request</li>
                         {this.props.runner === 1 &&
-                            <li className='headerLink' onClick={this.goOpen}>Open Jobs</li>
+                            <li className='headerLink' onClick={this.props.username ? this.goOpen : this.finishProfile}>Open Jobs</li>
                         }
                         {this.props.runner === 1 &&
-                            <li className='headerLink' onClick={this.goRun}>Accepted Jobs</li>
+                            <li className='headerLink' onClick={this.props.username ? this.goRun : this.finishProfile}>Accepted Jobs</li>
                         }
                         <li className='headerLink' onClick={this.handleLogout}>Logout</li>
 
@@ -239,8 +278,20 @@ class TestPage extends Component {
 
                 {/* home view for logged in users */}
 
-                {this.props.authID && this.state.links.home === true && this.props.isLoading === false &&
+                {this.props.authID && this.state.links.home === true &&
+                <div>
                     <h1>Thanks for logging in {this.props.username}</h1>
+                    {!this.props.username &&
+                        <h1>Please finish your profile</h1>
+                    }
+                    {this.state.posts < 1 && !this.props.runner && this.props.username &&
+                        <h1>Let's make a new request</h1>
+                    }
+                    {this.state.acceptedJobs < 1 && this.props.runner && this.props.username &&
+                        <h1>Let's look at some jobs others have posted</h1>
+                    }
+
+                </div>
                 }
 
                 {/* Profile view */}
@@ -384,7 +435,8 @@ class TestPage extends Component {
                 {/* Post pop up view */}
 
                 {this.props.postPopUp === true &&
-                    <div id='testPostView'>
+                    <div id={this.state.wrapper ? 'testPostView' : 'testPostViewFull'}>
+                    {!this.props.isLoading &&
                         <div id='testPost'>
                             <div className='closePost' onClick={this.props.closePost}>X</div>
                             <div id='testPostInfo'>
@@ -416,7 +468,7 @@ class TestPage extends Component {
                                 </div>
                             </div>
                         </div>
-                        
+                    }
                     </div>
                 }
 

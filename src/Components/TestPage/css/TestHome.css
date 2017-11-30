@@ -60,6 +60,8 @@
     height: 70px;
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
+    align-self: flex-start;
+    margin-top: 2.6%;
 
     background: rgba(255, 255, 255, 0.753);
     display: flex;
@@ -88,6 +90,8 @@
     height: 70px;
     border-top-right-radius: 20%;
     border-bottom-right-radius: 20%;
+    align-self: flex-start;
+    margin-top: 2.6%;
 
     background: rgba(255, 255, 255, 0.753);
     display: flex;
@@ -173,8 +177,8 @@
 }
 
 #logo {
-    height: 180px;
-    width: 180px;
+    height: 95%;
+    width: 95%;
 }
 .mainTitle {
     height: 100px;

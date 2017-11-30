@@ -70,7 +70,7 @@ class PostCards extends Component {
                             </div>
                         </div>
                         <div className='buttons'>
-                            <Link to='/postEdit'><button className='button' onClick={this.postEdit}>Edit Post</button></Link>
+                            <button className='button' onClick={this.postEdit}>Edit Post</button>
                         
                             <button className='button' onClick={this.deletePost}>Delete Post</button>
                         </div>
