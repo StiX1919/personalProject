@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import { idPost, postUser, editPost, postView, getComments } from '../../ducks/reducer'
+import { idPost, postUser, editPost, postView, getComments, removeJob, getUserPosts } from '../../ducks/reducer'
 
 import './PostCards.css'
 
@@ -36,10 +36,8 @@ class PostCards extends Component {
     }
 
     deletePost(){
-        this.setState({hidden: true})
-        axios.delete(`/api/deletePost/${this.props.PID}`).then(res=> {
-            console.log('deleted')
-            return res.data})
+        this.props.removeJob(this.props.PID, this.props.UID)
+        this.props.getUserPosts()
     }
 
     acceptJob(){
@@ -166,4 +164,4 @@ class PostCards extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView, getComments })(PostCards));
+export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView, getComments, removeJob, getUserPosts })(PostCards));

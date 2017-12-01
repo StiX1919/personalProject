@@ -108,12 +108,12 @@ app.get('/api/openJobs', openJobs)
 app.get('/api/acceptedJobs', acceptedJobs)
 app.post('/api/editJob/:ID', editJob)
 
-app.post('/api/addComment/:ID', newComment)
+app.post('/api/addComment', newComment)
 app.get('/api/getComments/:ID', getComments)
 
 app.get('/api/editPost/:ID', editPost)
 app.get('/api/poster/:ID', posterInfo)
-app.delete('/api/deletePost/:ID', deletePost)
+app.delete('/api/deletePost/:PID/:UID', deletePost)
 
 app.post('/api/acceptJob/:PID', acceptJob)
 

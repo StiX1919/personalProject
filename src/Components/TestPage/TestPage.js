@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost } from '../../ducks/reducer'
+import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment } from '../../ducks/reducer'
 
 import CommentCards from '../CommentCards/CommentCards'
 import PostCards from '../PostCards/PostCards'
@@ -68,11 +68,9 @@ class TestPage extends Component {
         axios.get('/api/preLogin').then(response => {
             if (response.data){
                 this.props.userInfo()
-                console.log('response',response.data)
-                axios.get('/api/posts').then(res => {
-                    
-                    this.setState({posts: res.data}) 
-                })
+
+                this.props.getUserPosts()
+                
                 axios.get('/api/openJobs').then(res => {
                     console.log('openjobs', res.data)
                     this.setState({openJobs: res.data})
@@ -148,46 +146,26 @@ class TestPage extends Component {
    }
 
     postComment(){
+        this.props.addNewComment(this.props.postID, this.props.comment,this.props.userID,this.props.postID)
+
+        this.props.emptyComment()
         // axios.post(`/api/addComment/${this.props.postID}`, this.props).then(res=> {
         //     return res.data
         // })
-
-        
-
-        let addingComment = this.state.posts
-        addingComment.push({
-            post_title: this.props.postTitle, 
-            post_sub: this.props.subTitle, 
-            post: this.props.post,
-            username: this.props.username, 
-            profilepic: this.props.profilepic
-         })
-         console.log(addingComment)
    
     }
 
     postJob(){
-        axios.post('/api/addJob', this.props).then(res=> {
-           return res.data})
+        this.props.postNewJob(
+            this.props.postTitle, 
+            this.props.subTitle, 
+            this.props.post, 
+            this.props.userID, 
+            this.props.username, 
+            this.props.userID)
 
-
-           
-
-           let addingJob = this.state.posts
-           addingJob.push({
-               post_title: this.props.postTitle, 
-               post_sub: this.props.subTitle, 
-               post: this.props.post,
-               username: this.props.username, 
-               profilepic: this.props.profilepic
-            })
-            console.log(addingJob)
-            this.closeNewPost()
-            axios.get('/api/posts').then(res => {
-                
-                this.setState({posts: res.data}) 
-            })
-       
+        this.closeNewPost()
+        this.props.getUserPosts()
    }
 
     makeNewPost(){
@@ -387,10 +365,10 @@ class TestPage extends Component {
                             <h1>Your Open Requests</h1>
                             <div className='testreqsinner'>
                             
-                                {this.state.posts.length > 0 &&
-                                    this.state.posts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
+                                {this.props.userPosts.length > 0 &&
+                                    this.props.userPosts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
                                 }
-                                {this.state.posts.length < 6 && this.props.username &&
+                                {this.props.userPosts.length < 6 && this.props.username &&
                                     <button id='testCreateJob' onClick={this.makeNewPost}>Create New Request</button>
                                 }
                                 
@@ -514,4 +492,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment })(TestPage));

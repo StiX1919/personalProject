@@ -35,19 +35,18 @@ module.exports = {
     //job posting
     newJob: (req, res, next) => {
         const dbInstance = req.app.get('db');
-        const { postTitle, subTitle, post, userID, username } = req.body;
+        const { title, sub, content, ID, UN, ID2 } = req.body;
         
-        dbInstance.createPost([postTitle, subTitle, post, userID, username])
+        dbInstance.createPost([title, sub, content, ID, UN, ID2])
         .then( () => {console.log('REQ BODY', req.body); return res.status(200).json()})
         .catch(console.log)
     },
     //comment Posting
     newComment: (req, res, next) => {
         const dbInstance = req.app.get('db');
-        const { comment, userID } = req.body;
-        const { ID } = req.params
+        const { PID, COMMENT, UID, PID2 } = req.body;
         
-        dbInstance.createComment([comment, userID, ID])
+        dbInstance.createComment([COMMENT, UID, PID, PID2])
         .then( () => {console.log('REQ BODY', req.body); return res.status(200).json()})
         .catch(console.log)
     },
@@ -107,10 +106,9 @@ module.exports = {
     },
     deletePost: (req,res,next) => {
         const dbInstance = req.app.get('db')
-        const { ID } = req.params
-        console.log(ID)
+        const { PID, UID } = req.params
 
-        dbInstance.deletePost([ID])
+        dbInstance.deletePost([PID, UID])
         .then(response => { return res.status(200).json(response)})
         .catch(console.log)
     }
