@@ -35,9 +35,13 @@ const LOGOUT_WIPE = 'LOGOUT_WIPE'
 const REMOVE_JOB = 'REMOVE_JOB'
 const GET_USER_POSTS = 'GET_USER_POSTS'
 const POST_NEW_JOB = 'POST_NEW_JOB'
+const EMPTY_POST = 'EMPTY_POST'
+
+const GET_OPEN_JOBS = 'GET_OPEN_JOBS'
 
 const ADD_NEW_COMMENT = 'ADD_NEW_COMMENT'
 const EMPTY_COMMENT = 'EMPTY_COMMENT'
+
 
 
 //Initial State
@@ -67,6 +71,22 @@ const initialState = {
 
 //Action Creators
 
+export function getOpenJobs(){
+    return {
+        type: GET_OPEN_JOBS,
+        payload: axios.get('/api/openJobs').then(res => {
+            return res.data
+        })
+    }
+}
+
+export function emptyPost(){
+    return {
+        type: EMPTY_POST,
+        payload: ''
+    }
+}
+
 export function emptyComment(){
     return {
         type: EMPTY_COMMENT,
@@ -77,8 +97,8 @@ export function emptyComment(){
 export function addNewComment(PID, COMMENT, UID, PID2){
     return {
         type: ADD_NEW_COMMENT,
-        payload: axios.post(`/api/addComment/`, {PID, COMMENT, UID, PID2}).then( res => {
-            console.log('comment response', res)
+        payload: axios.post(`/api/addComment`, {PID, COMMENT, UID, PID2}).then( res => {
+            // console.log('comment response', res)
             return res.data
         })
     }
@@ -87,8 +107,8 @@ export function addNewComment(PID, COMMENT, UID, PID2){
 export function postNewJob(title, sub, content, ID, UN, ID2){
     return {
         type: POST_NEW_JOB,
-        payload: axios.post('/api/addJob/', {title, sub, content, ID, UN, ID2}).then(res => {
-            console.log('job post response', res.data)
+        payload: axios.post('/api/addJob', {title, sub, content, ID, UN, ID2}).then(res => {
+            // console.log('job post response', res.data)
             return res.data
         })
     }
@@ -374,7 +394,10 @@ export default function reducer(state=initialState, action) {
         }
 
         case SET_POST: {
-            return Object.assign({}, state, {postTitle: action.payload.title, subTitle: action.payload.sub, post: action.payload.details})
+            return Object.assign({}, state, {
+                postTitle: action.payload.title, 
+                subTitle: action.payload.sub, 
+                post: action.payload.details})
         }
 
         case LOGOUT_WIPE: {
@@ -396,7 +419,8 @@ export default function reducer(state=initialState, action) {
                 postRunner: action.payload.runnerid,
                 postIsRunner: action.payload.runner,
                 posterPic: action.payload.profilepic,
-                postID: action.payload.id
+                postID: action.payload.id,
+                posterID: action.payload.userid
             })
         }
 
@@ -441,26 +465,30 @@ export default function reducer(state=initialState, action) {
             })
         }
 
-        case POST_NEW_JOB + '_PENDING': {
+
+        case GET_OPEN_JOBS + '_PENDING': {
             return Object.assign({}, state, {isLoading: true})
         }
-        case POST_NEW_JOB + '_FULFILLED': {
+        case GET_OPEN_JOBS + '_FULFILLED': {
             return Object.assign({}, state, {
-                userPosts: action.payload,
-                isLoading: false
+                isLoading: false,
+                openJobs: action.payload
             })
         }
 
-        case ADD_NEW_COMMENT + '_PENDING': {
-            return Object.assign({}, state, {isLoading: true})
-        }
-        case ADD_NEW_COMMENT + '_FULFILLED': {
+        case EMPTY_COMMENT: {
             return Object.assign({}, state, {
-                isLoading: false,
-                postComments: action.payload
+                comment: action.payload
             })
         }
-    
+        case EMPTY_POST: {
+            return Object.assign({}, state, {
+                postTitle: action.payload, 
+                subTitle: action.payload, 
+                post: action.payload
+            })
+        }
+
         default:
             return state
     }

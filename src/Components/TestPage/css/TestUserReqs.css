@@ -15,7 +15,7 @@
     align-items: center
     
 }
-.testreqsinner {
+.testreqsinner1 {
     width: 100%;
     height: 100%;
     display: flex;
@@ -40,7 +40,8 @@
 }
 #testCreateJob {
     height: 5%;
-    width: 10%
+    width: 10%;
+  
 }
 
 /* post view css */
@@ -170,4 +171,9 @@
 #postJobButton {
     width: 10%;
     height: 20%
+}
+
+#postJobHelp {
+    width: 100px;
+    height: 70px;
 }

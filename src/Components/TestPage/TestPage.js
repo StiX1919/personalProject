@@ -4,7 +4,28 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment } from '../../ducks/reducer'
+import {    requestUser, 
+            userInfo, 
+            handleAge, 
+            handleCity, 
+            handlePic, 
+            handleState, 
+            handleUserName, 
+            isRunner, 
+            notRunner, 
+            logoutWipe, 
+            closePost, 
+            handleComment,
+            handleTitle, 
+            handleSub, 
+            handlePost, 
+            getUserPosts, 
+            postNewJob, 
+            addNewComment, 
+            emptyComment, 
+            getComments,
+            getOpenJobs,
+            emptyPost } from '../../ducks/reducer'
 
 import CommentCards from '../CommentCards/CommentCards'
 import PostCards from '../PostCards/PostCards'
@@ -61,6 +82,8 @@ class TestPage extends Component {
         this.closeNewPost = this.closeNewPost.bind(this)
 
         this.postJob = this.postJob.bind(this)
+
+        this.jobComplete = this.postJob.bind(this)
     }
 
     componentWillMount(){
@@ -70,11 +93,13 @@ class TestPage extends Component {
                 this.props.userInfo()
 
                 this.props.getUserPosts()
+
+                this.props.getOpenJobs()
                 
-                axios.get('/api/openJobs').then(res => {
-                    console.log('openjobs', res.data)
-                    this.setState({openJobs: res.data})
-                })
+                // axios.get('/api/openJobs').then(res => {
+                //     console.log('openjobs', res.data)
+                //     this.setState({openJobs: res.data})
+                // })
                 axios.get('/api/acceptedJobs').then(res => {
                     this.setState({acceptedJobs: res.data})
                 })
@@ -146,9 +171,12 @@ class TestPage extends Component {
    }
 
     postComment(){
-        this.props.addNewComment(this.props.postID, this.props.comment,this.props.userID,this.props.postID)
+        this.props.addNewComment(this.props.postID, this.props.comment,this.props.userID,this.props.postID).then(this.props.getComments())
 
         this.props.emptyComment()
+
+        // this.props.getComments()
+
         // axios.post(`/api/addComment/${this.props.postID}`, this.props).then(res=> {
         //     return res.data
         // })
@@ -162,10 +190,11 @@ class TestPage extends Component {
             this.props.post, 
             this.props.userID, 
             this.props.username, 
-            this.props.userID)
+            this.props.userID).then(this.props.getUserPosts()).then(this.props.emptyPost())
 
         this.closeNewPost()
-        this.props.getUserPosts()
+
+
    }
 
     makeNewPost(){
@@ -197,6 +226,10 @@ class TestPage extends Component {
 
    finishProfile(){
        alert('Please finish your profile')
+   }
+
+   jobComplete(){
+       this.props.closePost()
    }
 
 
@@ -363,7 +396,9 @@ class TestPage extends Component {
                     <div id='profileLink'>
                         <div className='testreqsouter'>
                             <h1>Your Open Requests</h1>
-                            <div className='testreqsinner'>
+
+                            
+                            <div className='testreqsinner1'>
                             
                                 {this.props.userPosts.length > 0 &&
                                     this.props.userPosts.map( post => <PostCards title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerid={post.runnerid}/>)
@@ -373,6 +408,8 @@ class TestPage extends Component {
                                 }
                                 
                             </div>
+                            
+                            
                         </div>
 
                     </div>
@@ -384,12 +421,14 @@ class TestPage extends Component {
                     <div id='profileLink'>
                         <div className='testreqsouter'>
                             <h1>Available Jobs</h1>
+                            
                             <div className='testreqsinnerRunner'>
-                                {this.state.openJobs.length > 0 &&
-                                    this.state.openJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerRow={this.runnerRow}/>)
+                                {this.props.openJobs.length > 0 &&
+                                    this.props.openJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} runnerRow={this.runnerRow}/>)
                                 }
                         
                             </div>
+                            
                         </div>
                     </div>
                 }
@@ -414,7 +453,7 @@ class TestPage extends Component {
 
                 {this.props.postPopUp === true &&
                     <div id={this.state.wrapper ? 'testPostView' : 'testPostViewFull'}>
-                    {!this.props.isLoading &&
+                    
                         <div id='testPost'>
                             <div className='closePost' onClick={this.props.closePost}>X</div>
                             <div id='testPostInfo'>
@@ -428,6 +467,9 @@ class TestPage extends Component {
                                 </div>
                                 <h4>{this.props.postDetails}</h4>
                             </div>
+                            {this.props.postRunner && this.props.userID === this.props.posterID &&
+                                <button onClick={this.jobComplete}>Job Complete</button>
+                            }
                             <h2>Comments</h2>
                             <div id='testCommentsContainer'>
                                 <div id='testCommentList'>
@@ -435,7 +477,7 @@ class TestPage extends Component {
                                     this.props.postComments.map( comment => <CommentCards postuser={comment.username} commentpic={comment.profilepic} usercomment={comment.comment} runner={comment.runner}/>)
                                 }
                                 <h4>Leave a comment</h4>
-                                <textarea onChange={this.props.handleComment} className='test-comment-field' rows="10" cols="170" placeholder='Thoughts?'></textarea>
+                                <textarea onChange={this.props.handleComment} value={this.props.comment} className='test-comment-field' rows="10" cols="170" placeholder='Thoughts?'></textarea>
                                 
                                 {this.props.comment.length < 1 &&
                                     <button>Post Comment</button>
@@ -446,7 +488,7 @@ class TestPage extends Component {
                                 </div>
                             </div>
                         </div>
-                    }
+                    
                     </div>
                 }
 
@@ -469,7 +511,18 @@ class TestPage extends Component {
                                 <input className="newPostInput" type='text' onChange={this.props.handleSub}/>
                                 </div>
                                 <h3></h3>
-                                <button id='postJobButton' onClick={this.postJob}>Post Job</button>
+                                {!this.props.postTitle && !this.props.post &&
+                                    <div id='postJobHelp'>Add a Title and Description</div>
+                                }
+                                {this.props.postTitle && !this.props.post &&
+                                    <div id='postJobHelp'>Add a Title and Description</div>
+                                }
+                                {!this.props.postTitle && this.props.post &&
+                                    <div id='postJobHelp'>Add a Title and Description</div>
+                                }
+                                {this.props.postTitle && this.props.post &&
+                                    <button id='postJobButton' onClick={this.postJob}>Post Job</button>
+                                }
                             </div>
                             <div className='field-box'>
                                 <textarea onChange={this.props.handlePost} className='input-field' rows="10" cols="190" placeholder='Details'></textarea>
@@ -482,9 +535,6 @@ class TestPage extends Component {
                 </div>
                 }
                 
-                
-
-                {console.log('state', this.state, 'props', this.props)}
             </div>
         )
     }
@@ -492,4 +542,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment, getComments, getOpenJobs, emptyPost })(TestPage));

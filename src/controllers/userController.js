@@ -38,7 +38,7 @@ module.exports = {
         const { title, sub, content, ID, UN, ID2 } = req.body;
         
         dbInstance.createPost([title, sub, content, ID, UN, ID2])
-        .then( () => {console.log('REQ BODY', req.body); return res.status(200).json()})
+        .then( () => { return res.status(200).json()})
         .catch(console.log)
     },
     //comment Posting
@@ -47,7 +47,7 @@ module.exports = {
         const { PID, COMMENT, UID, PID2 } = req.body;
         
         dbInstance.createComment([COMMENT, UID, PID, PID2])
-        .then( () => {console.log('REQ BODY', req.body); return res.status(200).json()})
+        .then( () => { return res.status(200).json()})
         .catch(console.log)
     },
     getComments: (req,res,next)=> {

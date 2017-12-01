@@ -37,7 +37,7 @@ class PostCards extends Component {
 
     deletePost(){
         this.props.removeJob(this.props.PID, this.props.UID)
-        this.props.getUserPosts()
+        // this.props.getUserPosts()
     }
 
     acceptJob(){
