@@ -25,7 +25,9 @@ import {    requestUser,
             emptyComment, 
             getComments,
             getOpenJobs,
-            emptyPost } from '../../ducks/reducer'
+            emptyPost,
+            completeJob,
+            postReview } from '../../ducks/reducer'
 
 import CommentCards from '../CommentCards/CommentCards'
 import PostCards from '../PostCards/PostCards'
@@ -46,6 +48,7 @@ class TestPage extends Component {
             edit: false,
             wrapper: true,
             newPost: false,
+            review: false,
             links: {
                 home: true,
                 profile: false,
@@ -83,7 +86,9 @@ class TestPage extends Component {
 
         this.postJob = this.postJob.bind(this)
 
-        this.jobComplete = this.postJob.bind(this)
+        this.jobComplete = this.jobComplete.bind(this)
+        this.closeReview = this.closeReview.bind(this)
+        this.postReview = this.postReview.bind(this)
     }
 
     componentWillMount(){
@@ -95,11 +100,7 @@ class TestPage extends Component {
                 this.props.getUserPosts()
 
                 this.props.getOpenJobs()
-                
-                // axios.get('/api/openJobs').then(res => {
-                //     console.log('openjobs', res.data)
-                //     this.setState({openJobs: res.data})
-                // })
+            
                 axios.get('/api/acceptedJobs').then(res => {
                     this.setState({acceptedJobs: res.data})
                 })
@@ -138,9 +139,6 @@ class TestPage extends Component {
     goReqs(){
         this.closeNewPost()
         this.props.closePost()
-        // axios.get('/api/posts').then(res => {
-        //     this.setState({posts: res.data}) 
-        // })
         this.setState({links:{home: false, profile: false, userReqs: true, openJobs: false, userJobs: false}})
     }
     goOpen(){
@@ -171,7 +169,7 @@ class TestPage extends Component {
    }
 
     postComment(){
-        this.props.addNewComment(this.props.postID, this.props.comment,this.props.userID,this.props.postID).then(this.props.getComments())
+        this.props.addNewComment(this.props.postID, this.props.comment,this.props.userID,this.props.postID).then( () => this.props.getComments(this.props.postID))
 
         this.props.emptyComment()
 
@@ -190,7 +188,7 @@ class TestPage extends Component {
             this.props.post, 
             this.props.userID, 
             this.props.username, 
-            this.props.userID).then(this.props.getUserPosts()).then(this.props.emptyPost())
+            this.props.userID).then(() => this.props.getUserPosts()).then( () => this.props.emptyPost())
 
         this.closeNewPost()
 
@@ -229,7 +227,16 @@ class TestPage extends Component {
    }
 
    jobComplete(){
+       this.props.completeJob(this.props.postRunner, this.props.postID)
        this.props.closePost()
+       this.setState({review: true})
+   }
+   closeReview(){
+       this.setState({review: false})
+   }
+   postReview(){
+       this.props.postReview(this.props.postID, this.props.posterID, this.props.postRunner, this.props.comment)
+       this.closeReview()
    }
 
 
@@ -461,7 +468,7 @@ class TestPage extends Component {
                                     <img src={this.props.posterPic} />
                                     <h1>{this.props.posterName}</h1>
                                     <div>
-                                        <h2>{this.props.postTitle}</h2>
+                                        <h2>{this.props.postViewTitle}</h2>
                                         <h4>{this.props.postSubTitle}</h4>
                                     </div>
                                 </div>
@@ -535,6 +542,29 @@ class TestPage extends Component {
                 </div>
                 }
                 
+
+                {/* Leaving a review */}
+
+                {this.state.review === true &&
+                <div id='testPostView'>
+                    <div id='testReview'>
+                        <div className='closePost' onClick={this.closeReview}>X</div>
+                        <h1>Review your Runner</h1>
+                        
+                        <div id='newReviewInfo'>
+                            
+                            <div className='review-field-box'>
+                                <textarea onChange={this.props.handleComment} className='input-field' rows="10" cols="190" placeholder='Details'></textarea>
+                            </div>
+                        </div>
+                        <button className='reviewButton' onClick={this.postReview}>Post Review</button>
+
+                    </div>
+
+
+                </div>
+                }
+
             </div>
         )
     }
@@ -542,4 +572,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment, getComments, getOpenJobs, emptyPost })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment, getComments, getOpenJobs, emptyPost, completeJob, postReview })(TestPage));

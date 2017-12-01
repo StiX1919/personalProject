@@ -177,3 +177,37 @@
     width: 100px;
     height: 70px;
 }
+
+#testReview {
+    height: 40%;
+    width: 60%;
+    background: rgba(255, 255, 255, 0.753);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#newReviewInfo {
+    display: flex;
+    flex-direction: column;
+    height: 65%;
+    width: 80%;
+    background: rgba(255, 255, 255, 0.836);
+    border: solid black 2px;
+    align-items: center
+}
+
+.review-field-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
+    width: 90%;
+}
+
+.reviewButton {
+    height: 30px;
+    width: 10%;
+    margin-top: 1%
+}

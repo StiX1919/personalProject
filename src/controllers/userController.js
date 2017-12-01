@@ -104,6 +104,23 @@ module.exports = {
         .then( () => {return res.status(200).json()})
         .catch(console.log)
     },
+    jobComplete: (req,res,next) => {
+        const dbInstance = req.app.get('db')
+        const { RID, PID } = req.body;
+        console.log(RID, PID)
+
+        dbInstance.completeJob([RID, PID])
+        .then( () => {return res.status(200).json()})
+        .catch(console.log)
+    },
+    postReview: (req,res,next) => {
+        const dbInstance = req.app.get('db')
+        const { PID, UID, RID, review } = req.body;
+
+        dbInstance.newReview([PID, UID, RID, review])
+        .then( () => {return res.status(200).json()})
+        .catch(console.log)
+    },
     deletePost: (req,res,next) => {
         const dbInstance = req.app.get('db')
         const { PID, UID } = req.params

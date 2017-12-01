@@ -8,7 +8,7 @@ const Auth0Strategy = require("passport-auth0");
 
 const { connectionString } = require('../config').massive;
 const { domain, clientID, clientSecret } = require('../config').auth0
-const { create, getInfo, newJob, getPosts, editPost, deletePost, editJob, openJobs, acceptJob, acceptedJobs, posterInfo, newComment, getComments } = require('../src/controllers/userController')
+const { create, getInfo, newJob, getPosts, editPost, deletePost, editJob, openJobs, acceptJob, acceptedJobs, posterInfo, newComment, getComments, jobComplete, postReview } = require('../src/controllers/userController')
 
 const logout = require('express-passport-logout')
 
@@ -121,6 +121,10 @@ app.get('/api/preLogin', (req, res) => {
     console.log('req.user', req.user)
     res.status(200).json(req.user)
 })
+
+app.post('/api/jobComplete', jobComplete)
+
+app.post('/api/newReview', postReview)
 
 // app.get('/logout', logout());
 app.get('/logout', function(req, res) {

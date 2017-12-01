@@ -42,6 +42,10 @@ const GET_OPEN_JOBS = 'GET_OPEN_JOBS'
 const ADD_NEW_COMMENT = 'ADD_NEW_COMMENT'
 const EMPTY_COMMENT = 'EMPTY_COMMENT'
 
+const COMPLETE_JOB = 'COMPLETE_JOB'
+
+const POST_REVIEW = 'POST_REVIEW'
+
 
 
 //Initial State
@@ -70,6 +74,25 @@ const initialState = {
 
 
 //Action Creators
+
+export function postReview(PID, UID, RID, review){
+    return {
+        type: POST_REVIEW,
+        payload: axios.post('/api/newReview', { PID, UID, RID, review }).then(res => {
+            return res.data
+        })
+    }
+}
+
+export function completeJob(RID, PID){
+    console.log('reducer RP', RID, PID)
+    return {
+        type: COMPLETE_JOB,
+        payload: axios.post('/api/jobComplete', {RID, PID}).then(res => {
+            return res.data
+        })
+    }
+}
 
 export function getOpenJobs(){
     return {
@@ -412,7 +435,7 @@ export default function reducer(state=initialState, action) {
         case EDIT_POST + '_FULFILLED': {
             return Object.assign({}, state, {
                 isLoading: false,
-                postTitle: action.payload.post_title, 
+                postViewTitle: action.payload.post_title, 
                 postSubTitle: action.payload.post_sub, 
                 postDetails: action.payload.post, 
                 posterName: action.payload.username, 

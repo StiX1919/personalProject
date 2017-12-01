@@ -1,0 +1,1 @@
+UPDATE posts SET completerunner = $1 WHERE id = $2
