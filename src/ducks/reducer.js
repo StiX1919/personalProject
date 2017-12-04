@@ -39,12 +39,16 @@ const EMPTY_POST = 'EMPTY_POST'
 
 const GET_OPEN_JOBS = 'GET_OPEN_JOBS'
 
+const GET_ACCEPTED_JOBS = 'GET_ACCEPTED_JOBS'
+
 const ADD_NEW_COMMENT = 'ADD_NEW_COMMENT'
 const EMPTY_COMMENT = 'EMPTY_COMMENT'
 
 const COMPLETE_JOB = 'COMPLETE_JOB'
 
 const POST_REVIEW = 'POST_REVIEW'
+
+const NO_RUNNER = 'NO_RUNNER'
 
 
 
@@ -68,17 +72,36 @@ const initialState = {
         initialLoad: false,
         isLoading: true,
         postComments: [],
-        userPosts: []
+        userPosts: [],
+        acceptedJobs: []
     
 }
 
 
 //Action Creators
 
-export function postReview(PID, UID, RID, review){
+export function getAcceptedJobs(){
+    return {
+        type: GET_ACCEPTED_JOBS,
+        payload: axios.get('/api/acceptedJobs').then(res => {
+            return res.data
+        })
+    }
+} 
+
+export function noRunner(PID){
+    return {
+        type: NO_RUNNER,
+        payload: axios.post('/api/noRunner', {PID}).then(res => {
+            return res.data
+        })
+    }
+}
+
+export function postReview(PID, UID, RID, review, quality){
     return {
         type: POST_REVIEW,
-        payload: axios.post('/api/newReview', { PID, UID, RID, review }).then(res => {
+        payload: axios.post('/api/newReview', { PID, UID, RID, review, quality }).then(res => {
             return res.data
         })
     }
@@ -496,6 +519,16 @@ export default function reducer(state=initialState, action) {
             return Object.assign({}, state, {
                 isLoading: false,
                 openJobs: action.payload
+            })
+        }
+
+        case GET_ACCEPTED_JOBS + '_PENDING': {
+            return Object.assign({}, state, {isLoading: true})
+        }
+        case GET_ACCEPTED_JOBS + '_FULFILLED': {
+            return Object.assign({}, state, {
+                isLoading: false,
+                acceptedJobs: action.payload
             })
         }
 

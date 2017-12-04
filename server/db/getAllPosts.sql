@@ -1,1 +1,1 @@
-SELECT * FROM posts WHERE userid = $1;
+SELECT * FROM posts WHERE userid = $1 and completerunner is null;

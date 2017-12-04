@@ -27,7 +27,9 @@ import {    requestUser,
             getOpenJobs,
             emptyPost,
             completeJob,
-            postReview } from '../../ducks/reducer'
+            postReview,
+            noRunner,
+            getAcceptedJobs } from '../../ducks/reducer'
 
 import CommentCards from '../CommentCards/CommentCards'
 import PostCards from '../PostCards/PostCards'
@@ -89,6 +91,8 @@ class TestPage extends Component {
         this.jobComplete = this.jobComplete.bind(this)
         this.closeReview = this.closeReview.bind(this)
         this.postReview = this.postReview.bind(this)
+
+        this.removeRunner = this.removeRunner.bind(this)
     }
 
     componentWillMount(){
@@ -100,10 +104,12 @@ class TestPage extends Component {
                 this.props.getUserPosts()
 
                 this.props.getOpenJobs()
+
+                this.props.getAcceptedJobs()
             
-                axios.get('/api/acceptedJobs').then(res => {
-                    this.setState({acceptedJobs: res.data})
-                })
+                // axios.get('/api/acceptedJobs').then(res => {
+                //     this.setState({acceptedJobs: res.data})
+                // })
             }
         })
         console.log('logged in?', this.state.loggedin)
@@ -121,7 +127,6 @@ class TestPage extends Component {
         
         window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000/testPage'
         axios.get('/logout')
-        this.props.logoutWipe()
     }
 
 
@@ -191,6 +196,7 @@ class TestPage extends Component {
             this.props.userID).then(() => this.props.getUserPosts()).then( () => this.props.emptyPost())
 
         this.closeNewPost()
+        this.goReqs()
 
 
    }
@@ -234,29 +240,42 @@ class TestPage extends Component {
    closeReview(){
        this.setState({review: false})
    }
-   postReview(){
-       this.props.postReview(this.props.postID, this.props.posterID, this.props.postRunner, this.props.comment)
+   postReview(e){
+       this.props.postReview(this.props.postID, this.props.posterID, this.props.postRunner, this.props.comment, e.target.value).then( () => this.props.getUserPosts() )
        this.closeReview()
    }
+
+
+   removeRunner(){
+       this.props.noRunner(this.props.postID).then( () => this.props.getUserPosts() ).then( () => this.props.getOpenJobs()).then( () => this.props.getAcceptedJobs())
+       this.closeNewPost()
+       this.props.closePost()
+   }
+
 
 
     render(){
         return (
             <div id='wholePage'>
                 <div id={this.state.wrapper ? 'headerwrapOpen' : 'headerwrapClose'}>
+                    <div id='logoLinksContainer'>
                     <div className='logoCircle'>
                         <img src='http://logo.pizza/img/stick-runner/stick-runner.png' id='logo'/>
                     </div>
+                    </div>
                     <h1 className='mainTitle'>RUNNER</h1>
                     {!this.props.authID &&
-                        <button id='login' onClick={this.handleLogin}>Login/Register today</button>
+                        // <button id='login' onClick={this.handleLogin}>Login/Register today</button>
+                        <ul id='linksLogout'>
+                            <li className='headerLink' onClick={this.handleLogin}>Login/Register today</li>
+                        </ul>
                     }
                     {this.props.authID &&
                     <ul id='links'>
                     
                         <li className='headerLink' onClick={this.goHome}>Home</li>
                         <li className='headerLink' onClick={this.goProfile}>Profile</li>
-                        <li className='headerLink' onClick={this.props.username ? this.goReqs : this.finishProfile}>View your jobs</li>
+                        <li className='headerLink' onClick={this.props.username ? this.goReqs : this.finishProfile}>Your Requests</li>
                         <li className='headerLink' onClick={this.props.username ? this.makeNewPost : this.finishProfile}>Create job request</li>
                         {this.props.runner === 1 &&
                             <li className='headerLink' onClick={this.props.username ? this.goOpen : this.finishProfile}>Open Jobs</li>
@@ -273,40 +292,63 @@ class TestPage extends Component {
                 
                 <div className={this.state.wrapper ? 'wrapperControlOpen' : 'wrapperControlClose'} onClick={this.closeHeader}><img id={this.state.wrapper ? 'wrapperImgOpen' : 'wrapperImgClose'} src='http://cdn.onlinewebfonts.com/svg/img_125564.png'/></div>
                 {/* view for non-logged in users */}
-
+                    
                 {!this.props.authID && 
-                <div>
+                
+                <div className='tempArea'>
+                <div id='preLog'>
+                
                     <div className='homeView' id='homeimg1'> 
                         <div id='imgbox'>
-                        <div className='homeCircle'>
-                            <img src='http://logo.pizza/img/stick-runner/stick-runner.png' className='homeLogo'/>
-                        </div>
-                        <h1 className='homeTitle'>RUNNER</h1>
+                            <div className='homeCircle'>
+                                <img src='http://logo.pizza/img/stick-runner/stick-runner.png' className='homeLogo'/>
+                            </div>
+                            <h1 className='homeTitle'>RUNNER</h1>
                         </div>
                         <h1>For those too bored to do their own chores.</h1>
                     </div>
-                    <img className='homeView' id='homeimg2' src='https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/VC_Questionnaire_AlexHonnold_ED_29790110_1280x640.jpg'/>
-                    <div className='homeView' id='hometxt2'>Post Jobs you need done so you can enjoy your vacation or free time</div>
-                    <div className='homeView' id='postcircle2'><img src='http://cdn.onlinewebfonts.com/svg/img_420677.png' id='postlogo'/></div>
-                    <img className='homeView' id='homeimg3' src='https://s-i.huffpost.com/gen/2349884/images/o-CHORES-FOR-KIDS-facebook.jpg'/>
-                    <div className='homeView' id='runcircle3'><img src='http://logo.pizza/img/stick-runner/stick-runner.png' id='runlogo'/></div>
-                    <div className='homeView' id='hometxt3'>Become a RUNNER and do jobs for others</div>
+                    <div className='homeView'>
+                        <div id='hometxt2'>Post Jobs you need done so you can enjoy your vacation or free time</div>
+                        <img id='homeimg2' src='https://www.visitcalifornia.com/sites/default/files/styles/welcome_image/public/VC_Questionnaire_AlexHonnold_ED_29790110_1280x640.jpg'/>
+                        <div className='homeView' id='postcircle2'><img src='http://cdn.onlinewebfonts.com/svg/img_420677.png' id='postlogo'/></div>
+                    </div>
+                    <div className='homeView'>
+                        <div id='hometxt3'>Become a RUNNER and do jobs for others</div>
+                        <img id='homeimg3' src='https://s-i.huffpost.com/gen/2349884/images/o-CHORES-FOR-KIDS-facebook.jpg'/>
+                        <div className='homeView' id='runcircle3'><img src='http://logo.pizza/img/stick-runner/stick-runner.png' id='runlogo'/></div>
+                    </div>
+                </div>
                 </div>
                 }
 
                 {/* home view for logged in users */}
 
                 {this.props.authID && this.state.links.home === true &&
-                <div>
-                    <h1>Thanks for logging in {this.props.username}</h1>
+                <div className='loggedIn'>
+                    <div className='userThing'>
+                        <h1>Thanks for logging in</h1>
+                        <h1>{this.props.username}</h1>
+                    </div>
                     {!this.props.username &&
                         <h1>Please finish your profile</h1>
                     }
                     {this.state.posts < 1 && !this.props.runner && this.props.username &&
                         <h1>Let's make a new request</h1>
                     }
-                    {this.state.acceptedJobs < 1 && this.props.runner && this.props.username &&
+                    {this.props.acceptedJobs < 1 && this.props.runner && this.props.username &&
                         <h1>Let's look at some jobs others have posted</h1>
+                    }
+                    {this.props.username &&
+                    <div id='userstats'>
+                        <h2>You currently have {this.props.userPosts.length} open jobs.</h2>
+                        {this.props.runner === 1 && 
+                            <h2> You've accepted {this.props.acceptedJobs.length} jobs.</h2>
+                        }
+                        <div id='jobLinks'>
+                            <button onClick={this.goReqs}>Create New Job</button>
+                            <button onClick={this.goRun}>Look at available Requests</button>
+                        </div>
+                    </div>
                     }
 
                 </div>
@@ -447,8 +489,8 @@ class TestPage extends Component {
                         <div className='testreqsouter'>
                             <h1>Accepted Jobs</h1>
                             <div className='testreqsinnerRunner'>
-                                {this.state.acceptedJobs.length > 0 &&
-                                    this.state.acceptedJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} acceptedRow={this.acceptedRow}/>)
+                                {this.props.acceptedJobs.length > 0 &&
+                                    this.props.acceptedJobs.map( post => <PostCards user={post.username} title={post.post_title} sub={post.post_sub} post={post.post} PID={post.id} UID={post.userid} acceptedRow={this.acceptedRow}/>)
                                 }
                         
                             </div>
@@ -475,7 +517,13 @@ class TestPage extends Component {
                                 <h4>{this.props.postDetails}</h4>
                             </div>
                             {this.props.postRunner && this.props.userID === this.props.posterID &&
+                            <div>
                                 <button onClick={this.jobComplete}>Job Complete</button>
+                                <button onClick={this.removeRunner}>Remove Runner</button>
+                            </div>
+                            }
+                            {this.props.postRunner === this.props.userID &&
+                                <button onClick={this.removeRunner}>Quit Task</button>
                             }
                             <h2>Comments</h2>
                             <div id='testCommentsContainer'>
@@ -546,23 +594,27 @@ class TestPage extends Component {
                 {/* Leaving a review */}
 
                 {this.state.review === true &&
-                <div id='testPostView'>
-                    <div id='testReview'>
-                        <div className='closePost' onClick={this.closeReview}>X</div>
-                        <h1>Review your Runner</h1>
+                    <div id='testPostView'>
+                        <div id='testReview'>
+                            <div className='closePost' onClick={this.closeReview}>X</div>
+                            <h1>Review your Runner</h1>
                         
-                        <div id='newReviewInfo'>
+                            <div id='newReviewInfo'>
                             
-                            <div className='review-field-box'>
-                                <textarea onChange={this.props.handleComment} className='input-field' rows="10" cols="190" placeholder='Details'></textarea>
+                                <div className='review-field-box'>
+                                    <textarea onChange={this.props.handleComment} className='input-field' rows="10" cols="190" placeholder='Details'></textarea>
+                                </div>
+                            </div>
+                            <div id='qualityButtons'>
+                                <button className='reviewButton' value='Terrible!' onClick={this.postReview}>Terrible!</button>
+                                <button className='reviewButton' value='Poor' onClick={this.postReview}>Poor</button>
+                                <button className='reviewButton' value='Good' onClick={this.postReview}>Good</button>
+                                <button className='reviewButton' value='Great!' onClick={this.postReview}>Great!</button>
                             </div>
                         </div>
-                        <button className='reviewButton' onClick={this.postReview}>Post Review</button>
+
 
                     </div>
-
-
-                </div>
                 }
 
             </div>
@@ -572,4 +624,4 @@ class TestPage extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment, getComments, getOpenJobs, emptyPost, completeJob, postReview })(TestPage));
+export default withRouter(connect(mapStateToProps, { requestUser, userInfo, handleAge, handleCity, handlePic, handleState, handleUserName, isRunner, notRunner, logoutWipe, closePost, handleComment, handleTitle, handleSub, handlePost, getUserPosts, postNewJob, addNewComment, emptyComment, getComments, getOpenJobs, emptyPost, completeJob, postReview, noRunner, getAcceptedJobs })(TestPage));

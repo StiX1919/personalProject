@@ -115,9 +115,10 @@ module.exports = {
     },
     postReview: (req,res,next) => {
         const dbInstance = req.app.get('db')
-        const { PID, UID, RID, review } = req.body;
+        const { PID, UID, RID, review, quality } = req.body;
+        console.log('review body', req.body)
 
-        dbInstance.newReview([PID, UID, RID, review])
+        dbInstance.newReview([PID, UID, RID, review, quality])
         .then( () => {return res.status(200).json()})
         .catch(console.log)
     },
@@ -126,6 +127,14 @@ module.exports = {
         const { PID, UID } = req.params
 
         dbInstance.deletePost([PID, UID])
+        .then(response => { return res.status(200).json(response)})
+        .catch(console.log)
+    },
+    removeRunner: (req,res,next) => {
+        const dbInstance = req.app.get('db')
+        const {PID} = req.body
+
+        dbInstance.removeRunner([PID])
         .then(response => { return res.status(200).json(response)})
         .catch(console.log)
     }

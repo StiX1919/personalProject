@@ -206,8 +206,16 @@
     width: 90%;
 }
 
+#qualityButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center ;
+    width: 50%;
+    height: 10%
+}
+
 .reviewButton {
     height: 30px;
-    width: 10%;
-    margin-top: 1%
+    width: 15%;
+    /* margin-top: 1% */
 }

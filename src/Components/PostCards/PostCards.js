@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Link, withRouter } from 'react-router-dom'
 import {connect} from 'react-redux'
 
-import { idPost, postUser, editPost, postView, getComments, removeJob, getUserPosts } from '../../ducks/reducer'
+import { idPost, postUser, editPost, postView, getComments, removeJob, getUserPosts, getOpenJobs, getAcceptedJobs } from '../../ducks/reducer'
 
 import './PostCards.css'
 
@@ -21,29 +21,20 @@ class PostCards extends Component {
 
 
     postEdit(){
-        // this.props.idPost(this.props.PID)
-        // this.props.postUser(this.props.UID)
         this.props.postView()
         this.props.editPost(this.props.PID)
         this.props.getComments(this.props.PID)
-        
-        console.log('edit props',this.props)
-        // axios.get(`/api/poster/${this.props.postUser}`).then(response => {
-        //     console.log('state', this.state)
-        //     return this.setState({username: response.data[0].username, city: response.data[0].city, profilePic: response.data[0].profilepic})
-        // })
-        
     }
 
     deletePost(){
         this.props.removeJob(this.props.PID, this.props.UID)
-        // this.props.getUserPosts()
+
     }
 
     acceptJob(){
         axios.post(`/api/acceptJob/${this.props.PID}`).then(response => {
             return response
-        })
+        }).then( () => this.props.getOpenJobs()).then( () => this.props.getAcceptedJobs())
     }
     
 
@@ -164,4 +155,4 @@ class PostCards extends Component {
 
 const mapStateToProps = state => state
 
-export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView, getComments, removeJob, getUserPosts })(PostCards));
+export default withRouter(connect(mapStateToProps, { idPost, postUser, editPost, postView, getComments, removeJob, getUserPosts, getOpenJobs, getAcceptedJobs })(PostCards));
