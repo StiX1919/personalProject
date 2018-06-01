@@ -119,13 +119,13 @@ class TestPage extends Component {
     
 
     handleLogin(){
-        window.location.href= 'http://localhost:3001/login'
+        window.location.href= 'http://localhost:3000/api/login'
 
     }
 
     handleLogout(){
         
-        window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=http://localhost:3000/testPage'
+        window.location.href='https://stix1919.auth0.com/v2/logout?returnTo=https://runner-demo.now.sh/testPage'
         axios.get('/logout')
     }
 
@@ -399,7 +399,7 @@ class TestPage extends Component {
                         {this.props.authID && this.state.edit === true &&
                             <div id='testProfile'>
 
-                                <img id='testProfilePic' src={this.props.profilePic}/>
+                                <img id='testProfilePicEdit' src={this.props.profilePic}/>
                                 
                                 <div id='otherdataedit'>
                                     <h2>Profile Picture</h2>

@@ -4,10 +4,13 @@ const cors = require('cors');
 const session = require('express-session');
 const massive = require('massive');
 const passport = require('passport');
+require('dotenv').config();
 const Auth0Strategy = require("passport-auth0");
+const path = require('path');
 
-const { connectionString } = require('../config').massive;
-const { domain, clientID, clientSecret } = require('../config').auth0
+
+// const { connectionString } = require('../config').massive;
+// const { domain, clientID, clientSecret } = require('../config').auth0
 
 const { create, 
         getInfo, 
@@ -24,17 +27,19 @@ const { create,
         getComments, 
         jobComplete, 
         postReview, 
-        removeRunner } = require('../src/controllers/userController')
+        removeRunner } = require('./src/controllers/userController');
 
-const logout = require('express-passport-logout')
+const logout = require('express-passport-logout');
 
-const port = 3001;
+const port = 3000;
 const app = express();
-
-
+app.use((req, res, next)=>{
+    console.log(req.path)
+    next()
+})
 
 //MASSIVE
-massive(connectionString)
+massive(process.env.CONNECTION_STRING)
 .then(db => app.set('db', db))
 .catch(console.log);
 
@@ -48,6 +53,8 @@ app.use(session({
     saveUninitialized: false
 }));
 
+//SAVED FOR BUILD
+// app.use(express.static(`${__dirname}/build`));
 
 app.use( passport.initialize() )
 app.use( passport.session() )
@@ -55,10 +62,10 @@ app.use( passport.session() )
 passport.use( 
     new Auth0Strategy(
   {
-    domain,
-    clientID,
-    clientSecret,
-    callbackURL: "/login"
+    domain: process.env.DOMAIN,
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: "/api/login"
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     
@@ -93,14 +100,11 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj)
 })
 
-app.get(
-    '/login', passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/testPage'}))
+app.get('/api/login', passport.authenticate('auth0', {successRedirect: '/testPage'}))
 
 
 
-//SAVED FOR BUILD
-//app.use(express.static(`${__dirname}/public/build`));
-//
+
 
 app.get("/api/test", (req, res, next) => {
     req.app.get('db').getUsers()
@@ -134,7 +138,6 @@ app.delete('/api/deletePost/:PID/:UID', deletePost)
 app.post('/api/acceptJob/:PID', acceptJob)
 
 app.get('/api/preLogin', (req, res) => {
-    console.log('req.user', req.user)
     res.status(200).json(req.user)
 })
 
@@ -146,10 +149,13 @@ app.post('/api/noRunner', removeRunner)
 
 // app.get('/logout', logout());
 app.get('/logout', function(req, res) {
-    req.session.destroy;
+    req.session.destroy();
     req.logout()
-    res.redirect('http://localhost:3000/testPage')
+    res.redirect('/testPage')
   })
+// app.get('*', (req, res) => { 
+//     res.sendFile(path.join(__dirname + '/build/index.html'))
+// })
 
 
 //LISTENING
