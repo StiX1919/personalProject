@@ -290,7 +290,7 @@ class TestPage extends Component {
                     
                 </div>
                 
-                <div className={this.state.wrapper ? 'wrapperControlOpen' : 'wrapperControlClose'} onClick={this.closeHeader}><img id={this.state.wrapper ? 'wrapperImgOpen' : 'wrapperImgClose'} src='http://cdn.onlinewebfonts.com/svg/img_125564.png'/></div>
+                {/* <div className={this.state.wrapper ? 'wrapperControlOpen' : 'wrapperControlClose'} onClick={this.closeHeader}><img id={this.state.wrapper ? 'wrapperImgOpen' : 'wrapperImgClose'} src='http://cdn.onlinewebfonts.com/svg/img_125564.png'/></div> */}
                 {/* view for non-logged in users */}
                     
                 {!this.props.authID && 
