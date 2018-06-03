@@ -97,8 +97,10 @@ class TestPage extends Component {
 
     componentWillMount(){
         
-        axios.get('/api/preLogin').then(response => {
+        axios.get('http://localhost:3000/api/preLogin').then(response => {
+            console.log(response, 'response')
             if (response.data){
+                console.log('back in front hit')
                 this.props.userInfo()
 
                 this.props.getUserPosts()

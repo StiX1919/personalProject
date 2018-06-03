@@ -70,7 +70,7 @@ passport.use(
   function(accessToken, refreshToken, extraParams, profile, done) {
     
     app.get('db').getUserByAuthId([profile.id]).then(response => {
-        // console.log(response)
+        console.log(response, 'login response')
 
         if(!response[0]) {
             console.log(profile.id)
@@ -79,7 +79,7 @@ passport.use(
                 return done(null, created[0])
             })
         } else {
-        
+            console.log('hit!', response[0])
             return done(null, response[0])
             
         }
@@ -100,7 +100,7 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj)
 })
 
-app.get('/api/login', passport.authenticate('auth0', {successRedirect: '/testPage'}))
+app.get('/api/login', passport.authenticate('auth0', {successRedirect: 'http://localhost:3001/testPage'}))
 
 
 
@@ -138,6 +138,7 @@ app.delete('/api/deletePost/:PID/:UID', deletePost)
 app.post('/api/acceptJob/:PID', acceptJob)
 
 app.get('/api/preLogin', (req, res) => {
+    console.log('prelogin hit', req.user)
     res.status(200).json(req.user)
 })
 
